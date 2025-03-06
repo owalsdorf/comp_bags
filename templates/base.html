@@ -1,0 +1,196 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@200;400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap" rel="stylesheet">
+    <title>Munchable</title>
+    <link rel="stylesheet" href="assets/style.css">
+</head>
+
+<body>
+    <!-- title in the top left -->
+    <a href="index.html">
+        <h1 style="color:rgb(95, 90, 90);">munchable</h1>
+    </a>
+    <!-- links in the top right -->
+    <a class="links" style="margin-left: 1270px;" href="help.html">Contact Us</a>
+    <a class="links" href="help.html">| Help |</a>
+    <a class="links" href="login.html">Login</a>
+    <!-- the navbar -->
+    <nav id="navbar" class="topnav">
+        <div class="dropdown">
+            <a href="index.html" style="text-decoration: none;">
+                <!-- each individual button, when hovered over the dropdowns appear -->
+                <button class="dropbtn">Home</button>
+            </a>
+        </div>
+        <div class="dropdown">
+            <a href="shop.html" style="text-decoration: none;">
+                <button class="dropbtn">New Releases</button>
+            </a>
+            <!-- dropdowns -->
+            <div class="dropdownMenus">
+                <a href="shop.html">Laptop Bags</a>
+                <a href="shop.html">Phone Cases</a>
+                <a href="shop.html">Popular</a>
+            </div>
+        </div>
+        <div class="dropdown">
+            <a href="shop.html" style="text-decoration: none;">
+                <button class="dropbtn">Laptop Bags</button>
+            </a>
+            <div class="dropdownMenus">
+                <a href="shop.html">Popular</a>
+                <a href="shop.html">High Ratings</a>
+                <a href="shop.html">New Releases</a>
+            </div>
+        </div>
+        <div class="dropdown">
+            <a href="shop.html" style="text-decoration: none;">
+                <button class="dropbtn">Phone Cases</button>
+            </a>
+            <div class="dropdownMenus">
+                <a href="shop.html">Popular</a>
+                <a href="shop.html">High Ratings</a>
+                <a href="shop.html">New Releases</a>
+            </div>
+        </div>
+        <div class="dropdown">
+            <a href="shop.html" style="text-decoration: none;">
+                <button class="dropbtn">Popular Items</button>
+            </a>
+            <div class="dropdownMenus">
+                <a href="shop.html">Laptop Bags</a>
+                <a href="shop.html">Phone Cases</a>
+                <a href="shop.html">New Releases</a>
+            </div>
+        </div>
+
+        <!-- the non-dropdown stuff -->
+        <div id="right-nav">
+            <!-- the search bar -->
+            <input style="margin-top: 25px; width: 500px; margin-left: 10px;" type="text" id="searchInput"
+                placeholder="Search...">
+            <!-- magnifying glass in search -->
+            <img src="assets/images/magnificent.png" alt="Search" class="magnify">
+            <!-- user img and cart icon onn the right, position was moved to the right to make it look better -->
+            <a href="cart.html">
+                <i id="cart-nav" class="fa fa-shopping-cart"></i>
+            </a>
+            <a href="login.html">
+                <img class="cart-mag" src="assets/images/user.png"
+                    style="margin-top: 10px; margin-bottom: -10px;"></a>
+        </div>
+    </nav>
+
+<!-- create account box -->
+        <div class="container_2">
+            <div class="row">
+            <!-- the background img -->
+                <img src="assets/images/image.png" class="background">
+                <div class="form-cont">
+                                    <!-- main title -->
+                    <p class="titleAccount">Create Account</p>
+                         <!-- text enter inputs -->
+                    <p class="littleText">Enter Username</p>
+                    <div class="inputters">
+                        <input type="text" placeholder="Enter Username Here...">
+                        <p class="littleText">Enter E-Mail</p>
+                        <div class="inputters">
+                            <input type="text" placeholder="Enter E-Mail Here...">
+                            <p class="littleText">Enter Password</p>
+                            <div class="inputters">
+                                <input type="text" placeholder="Enter Password Here...">
+                            </div>
+                            <p style="font-size:10px; margin-bottom: 20px; color: grey;">By signing up you acknowledge
+                                that you will receive emails about the latest sales and deals.</p>
+                            <button class="signUp" onclick="displayMessage()">Sign Up</button>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+             <!-- option to log in -->
+            <a href="login.html" class="linker">Already Have an Account? Click Here.</a>
+        </div>
+
+    <!-- the footer -->
+    <div style="margin-top:100px;">
+        <footer>
+            <a href="help.html" class="bigFont">HELP</a>
+            <a href="help.html" class="bottomText" style="margin-top:15px;">FAQ</a>
+            <a href="help.html" class="bottomText">Contact Us <br></a>
+            <a href="help.html" class="bottomText">Returns</a>
+            <a href="help.html" class="bottomText">Shipping & Delivery</a>
+            <a href="help.html" class="bottomText">Feedback</a>
+            <a href="help.html" class="bottomText">Payment</a>
+            <a href="help.html" class="bottomText" style="margin-bottom:20px;">Find Us</a>
+        </footer>
+
+        <footer style="margin-top: -237px; margin-left: 250px;">
+            <a href="help.html" class="bigFont">ONLINE</a>
+            <a href="help.html" class="bottomText" style="margin-top:15px;">Track Your Order</a>
+            <a href="help.html" class="bottomText">Bag Guide<br></a>
+            <a href="help.html" class="bottomText">Case Guide</a>
+            <a href="help.html" class="bottomText">Gift Cards</a>
+            <a href="help.html" class="bottomText">Price Guarantee</a>
+            <a href="help.html" class="bottomText" style="margin-bottom:20px;">Click and Collect</a>
+        </footer>
+
+        <footer style="margin-top: -215px; margin-left: 500px;">
+            <a href="help.html" class="bigFont">ABOUT US</a>
+            <a href="help.html" class="bottomText" style="margin-top:15px;">Company Information</a>
+            <a href="help.html" class="bottomText">E-Commerce Award Winner<br></a>
+            <a href="help.html" class="bottomText">Laptop Bags Since 1664</a>
+            <a href="help.html" class="bottomText" style="margin-bottom:20px;">Work For Us</a>
+        </footer>
+
+        <footer style="margin-top: -151px; margin-left: 900px;">
+            <p style="text-decoration: none; font-weight: 600;font-size: 16px; ">DOWNLOAD OUR APP</p>
+            <p style="font-size:11px; margin-top: 15px;">Download App for iPhone ios and Android phones.</p>
+            <p style="font-size:11px; margin-top: 10px;">Get notifications on your phone about our latest deals and
+                newest products!</p>
+            <a href=""><img style="margin-top: 15px;margin-left: -8px;height: 60px; width: 300px;"
+                    src="assets/images/download-app-store-icon-11-removebg-preview (1).png"></a>
+        </footer>
+        <p class="copyright" style="text-align: center;">© 2023 Munchable, Inc. All Rights Reserved</p>
+        <pre class="copyright"
+            style="text-align:right; margin-right: 27px;margin-top: -12px; font-family:Arial, Helvetica, sans-serif">Guides          Terms of Use            Company Details          Privacy & Cookie Policy          Cookie Settings</pre>
+    </div>
+
+    <!-- script to make the navbar stick to the screen. from w3schools -->
+    <script>
+        window.onscroll = function () { myFunction() };
+
+        var navbar = document.getElementById("navbar");
+        var navbarHeight = navbar.offsetHeight;
+        var navbarPlaceholder = null;
+
+        function myFunction() {
+            if (window.pageYOffset >= navbarHeight && !navbarPlaceholder) {
+                navbar.classList.add("sticky");
+                navbarPlaceholder = document.createElement("div");
+                navbarPlaceholder.style.height = "37px";
+                document.body.insertBefore(navbarPlaceholder, navbar);
+            } else if (window.pageYOffset < navbarHeight && navbarPlaceholder) {
+                navbar.classList.remove("sticky");
+                document.body.removeChild(navbarPlaceholder);
+                navbarPlaceholder = null;
+            }
+        }
+    </script>
+    <script>
+        function displayMessage() {
+            // Display a message when the div is clicked
+            alert('Account Created! (yippee)');
+        }
+    </script>
+</body>
+</html>

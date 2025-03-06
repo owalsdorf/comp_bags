@@ -1,0 +1,16 @@
+[tool.poetry]
+name = "computer bags database"
+version = "0.1.0"
+description = "Designing a computer bags e-commerce website with a database"
+authors = ["Oscar Walsdorf <o.walsdorf@stpauls.school.nz>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.9"
+flask = "^3.1.0"
+db-sqlite3 = "^0.0.1"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
