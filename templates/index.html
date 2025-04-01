@@ -1,0 +1,275 @@
+<!doctype html>
+<html lang="en" data-bs-theme="auto">
+
+<head>
+  <script src="../assets/js/color-modes.js"></script>
+
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Laptop Bags Database</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+  <link rel="canonical" href="https://getbootstrap.com/docs/5.3/examples/sidebars/">
+  <link rel="icon" href="https://cdn-icons-png.flaticon.com/512/6744/6744480.png" type="image/png">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@docsearch/css@3">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+  <link href="../assets/dist/css/bootstrap.min.css" rel="stylesheet">
+
+  <!-- Custom styles for this template -->
+  <link href="styles.css" rel="stylesheet">
+</head>
+
+<body>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
+    crossorigin="anonymous"></script>
+
+
+  <!-- These are the styles of my SPA - irrelevant -->
+  <style>
+    .btn-toggle {
+      padding: .25rem .5rem;
+      font-weight: 600;
+      color: white;
+      background-color: transparent;
+      height: 40px;
+    }
+
+    .btn-toggle:hover {
+      color: white;
+      background-color: rgb(127, 127, 127);
+    }
+
+    .btn-toggle::before {
+      width: 1.25em;
+      line-height: 0;
+      content: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 16 16'%3e%3cpath fill='none' stroke='white' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M5 14l6-6-6-6'/%3e%3c/svg%3e");
+      transition: transform .35s ease;
+      transform-origin: .5em 50%;
+    }
+
+    .btn-toggle[aria-expanded="true"] {
+      color: white;
+      font-weight: 800;
+    }
+
+    .btn-toggle[aria-expanded="true"]::before {
+      transform: rotate(90deg);
+    }
+
+    .btn-toggle-nav a {
+      padding: .1875rem .5rem;
+      margin-top: .125rem;
+      margin-left: 1.25rem;
+      color: white !important;
+    }
+
+    .btn-toggle-nav a:hover,
+    .btn-toggle-nav a:focus {
+      background-color: rgb(133, 133, 133);
+      color: white !important;
+    }
+
+    .bi {
+      vertical-align: -.125em;
+      fill: currentColor;
+    }
+
+    .thing {
+      height: 10px;
+      font-size: 12px;
+    }
+
+    .checkbox-box {
+      border: 1px solid rgb(115, 115, 115);
+      padding: 6px 10px;
+      margin-right: -1px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background-color: #dcdcdc;
+      cursor: pointer;
+    }
+    .checkbox-box:last-of-type {
+      border-top-right-radius: 5px;
+      border-bottom-right-radius: 5px;
+    }
+
+    .checkbox-box:first-of-type {
+      border-top-left-radius: 5px;
+      border-bottom-left-radius: 5px;
+    }
+
+    .checkbox-box input[type="checkbox"] {
+      margin-right: 5px;
+    }
+
+    .checkbox-box:hover {
+      background-color: #e2e6ea;
+    }
+
+  </style>
+
+  <!-- These are the icons -->
+  <svg xmlns="http://www.w3.org/2000/svg" class="d-none">
+    <symbol id="bookmark" viewBox="0 0 16 16">
+      <path
+        d="M2 2a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v13.5a.5.5 0 0 1-.777.416L8 13.101l-5.223 2.815A.5.5 0 0 1 2 15.5zm2-1a1 1 0 0 0-1 1v12.566l4.723-2.482a.5.5 0 0 1 .554 0L13 14.566V2a1 1 0 0 0-1-1z" />
+      <path
+        d="M8 4a.5.5 0 0 1 .5.5V6H10a.5.5 0 0 1 0 1H8.5v1.5a.5.5 0 0 1-1 0V7H6a.5.5 0 0 1 0-1h1.5V4.5A.5.5 0 0 1 8 4" />
+    </symbol>
+    <symbol id="gear" viewBox="0 0 16 16">
+      <path
+        d="M9.405 1.05c-.413-1.4-2.397-1.4-2.81 0l-.1.34a1.464 1.464 0 0 1-2.105.872l-.31-.17c-1.283-.698-2.686.705-1.987 1.987l.169.311c.446.82.023 1.841-.872 2.105l-.34.1c-1.4.413-1.4 2.397 0 2.81l.34.1a1.464 1.464 0 0 1 .872 2.105l-.17.31c-.698 1.283.705 2.686 1.987 1.987l.311-.169a1.464 1.464 0 0 1 2.105.872l.1.34c.413 1.4 2.397 1.4 2.81 0l.1-.34a1.464 1.464 0 0 1 2.105-.872l.31.17c1.283.698 2.686-.705 1.987-1.987l-.169-.311a1.464 1.464 0 0 1 .872-2.105l.34-.1c1.4-.413 1.4-2.397 0-2.81l-.34-.1a1.464 1.464 0 0 1-.872-2.105l.17-.31c.698-1.283-.705-2.686-1.987-1.987l-.311.169a1.464 1.464 0 0 1-2.105-.872zM8 10.93a2.929 2.929 0 1 1 0-5.86 2.929 2.929 0 0 1 0 5.858z" />
+    </symbol>
+    <symbol id="remove" viewBox="0 0 16 16">
+      <path
+        d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0M5.354 4.646a.5.5 0 1 0-.708.708L7.293 8l-2.647 2.646a.5.5 0 0 0 .708.708L8 8.707l2.646 2.647a.5.5 0 0 0 .708-.708L8.707 8l2.647-2.646a.5.5 0 0 0-.708-.708L8 7.293z" />
+    </symbol>
+    <symbol id="filter" viewBox="0 0 16 16">
+      <path
+        d="M3.5 2.5a.5.5 0 0 0-1 0v8.793l-1.146-1.147a.5.5 0 0 0-.708.708l2 1.999.007.007a.497.497 0 0 0 .7-.006l2-2a.5.5 0 0 0-.707-.708L3.5 11.293zm3.5 1a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 0 1h-7a.5.5 0 0 1-.5-.5M7.5 6a.5.5 0 0 0 0 1h5a.5.5 0 0 0 0-1zm0 3a.5.5 0 0 0 0 1h3a.5.5 0 0 0 0-1zm0 3a.5.5 0 0 0 0 1h1a.5.5 0 0 0 0-1z" />
+    </symbol>
+  </svg>
+
+
+  <main class="d-flex">
+    <div class="tab-content flex-grow-1 pt-2">
+        <form method="POST">
+            <button type="submit" name="action" value="login" class="btn btn-primary ms-3">Sign Out</button>
+        </form>
+      <h1 class="text-center mt-4 mb-5">Laptop Bag Database</h1>
+
+      <div class="d-flex align-items-center mx-5 my-2">
+        <!-- Add the search bar -->
+        <form method="POST" class="me-3">
+          <!-- It has a value that depends on what the previous search value was. If the previous value was nothing, this value is equal to '' -->
+          <input type="text" name="search" placeholder="Search..." class="form-control"
+            style="width: 250px; margin-right: 50px;" value="{{ request.form.get('search', '') }}">
+          <!-- Hidden values for all four functions allow function stacking -->
+          <input type="hidden" name="action" value="searching">
+          <input type="hidden" name="sortMethod" value="{{ request.form.get('sortMethod', 'ASC') }}">
+          <input type="hidden" name="sortColumn" value="{{ request.form.get('sortColumn', 'id') }}">
+          {% for c in columns %}
+          <input type="hidden" name="columns" value="{{ c }}">
+          {% endfor %}
+          <button type="submit" style="display: none;"></button>
+        </form>
+
+        <form method="POST" class="d-flex align-items-center flex-wrap">
+          <!-- Title for clarity -->
+          <h4 class="mx-2 mt-1">Toggle Columns:</h4>
+          <label class="checkbox-box">
+            <!-- Every checkbox has an individual value -->
+            <!-- Has deterministic code to see if the checkbox should be checked or unchecked upon loading -->
+            <!-- For ID, if 'id' is in the string for columns, check the box. If not, uncheck it. -->
+            <input type="checkbox" name="columns" value="id" {% if 'id' in columns %} checked {% endif %}> ID
+          </label>
+          <label class="checkbox-box">
+            <input type="checkbox" name="columns" value="name" {% if 'name' in columns %} checked {% endif %}> Name
+          </label>
+          <label class="checkbox-box">
+            <input type="checkbox" name="columns" value="cost" {% if 'cost' in columns %} checked {% endif %}> Cost
+          </label>
+          <label class="checkbox-box">
+            <input type="checkbox" name="columns" value="image" {% if 'image' in columns %} checked {% endif %}> Image
+            Size
+          </label>
+          <label class="checkbox-box">
+            <input type="checkbox" name="columns" value="stock" {% if 'stock' in columns %} checked {% endif %}> Stock
+          </label>
+          <!-- Hidden values for function stacking -->
+          <input type="hidden" name="action" value="filtering">
+          <input type="hidden" name="search" value="{{ request.form.get('search', '') }}">
+          <input type="hidden" name="sortMethod" value="{{ request.form.get('sortMethod', 'ASC') }}">
+          <input type="hidden" name="sortColumn" value="{{ request.form.get('sortColumn', 'id') }}">
+          <button type="submit" class="btn btn-secondary ms-3">Update Columns</button>
+        </form>
+
+
+        <!-- Restore defaults button. No function stackng required. -->
+        <form method="POST">
+          <input type="hidden" name="action" value="reset">
+          <button type="submit" class="btn btn-primary ms-3">Restore Defaults</button>
+        </form>
+      </div>
+
+      <!-- Item Table -->
+      <table class="thing table table-striped table-hover table-bordered align-middle mx-5 my-4" style="width: 93%;">
+        <thead>
+          <tr>
+            {% for c in columns %}
+            <th scope="col">
+              <div class="d-flex align-items-center" style="font-size: 15px;">
+                <!-- Headers of each column -->
+                <!-- The '| title' ensures that the first letter of each title is capitalised  -->
+                {{ c | title }}
+                <div class="dropdown ms-2">
+                  <!-- Sort dropdown -->
+                  <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown"
+                    aria-expanded="false" style="font-size: 13px;">
+                    Sort
+                  </button>
+                  <ul class="dropdown-menu">
+                    <form method="POST">
+                      <li>
+                        <!-- Inside the dropdown menu, has two types of sort method. Descending or ascending -->
+                        <!-- Both sorts have hidden values for function stacking. The only difference is the value of sortMethod. -->
+                        <button type="submit" name="action" value="sorting" class="dropdown-item"
+                          style="font-size: 13px;">
+                          Descending
+                          <input type="hidden" name="sortMethod" value="DESC">
+                          <input type="hidden" name="sortColumn" value="{{ c }}">
+                          <input type="hidden" name="search" value="{{ request.form.get('search', '') }}">
+                          {% for c in columns %}
+                          <input type="hidden" name="columns" value="{{ c }}">
+                          {% endfor %}
+                        </button>
+                      </li>
+                    </form>
+                    <form method="POST">
+                      <li>
+                        <button type="submit" name="action" value="sorting" class="dropdown-item"
+                          style="font-size: 13px;">
+                          Ascending
+                          <input type="hidden" name="sortMethod" value="ASC">
+                          <input type="hidden" name="sortColumn" value="{{ c }}">
+                          <input type="hidden" name="search" value="{{ request.form.get('search', '') }}">
+                          {% for c in columns %}
+                          <input type="hidden" name="columns" value="{{ c }}">
+                          {% endfor %}
+                        </button>
+                      </li>
+                    </form>
+                  </ul>
+                </div>
+              </div>
+            </th>
+            {% endfor %}
+          </tr>
+        </thead>
+        <tbody class="table-group-divider">
+          <!-- Cycle through each item and display the corresponding field -->
+          {% for row in items %}
+          <tr>
+            {% for c in columns %}
+            <!-- row[c] means that the table goes field by field based off of which column it is - determined by c -->
+            <td style="font-size: 13px;">{{ row[c] }}</td>
+            {% endfor %}
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+
+
+  </main>
+
+  <!-- Script to reference and use bootstrap -->
+  <script src="../assets/dist/js/bootstrap.bundle.min.js"></script>
+
+  <!-- Script to reference and use bootstrap sidebars template -->
+  <script src="sidebars.js"></script>
+</body>
+
+</html>

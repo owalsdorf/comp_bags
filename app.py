@@ -12,7 +12,6 @@ def get_db_connection():
       conn = sqlite3.connect("assets/shopped_data.db");
       print("---------------------------------------------------------------")
       print("[LOG] - Connected to database. Version", sqlite3.version);
-      logging.debug('get_db_connection()')
   # If there is no connection, print an error
   except Error as er:
       print(er);
@@ -38,11 +37,10 @@ def get_items(columns, searchinput, sortvar, sortcolumn):
   sql = f"""
   SELECT {sqlcolumns} FROM tbl_items
   WHERE (id LIKE '%{searchinput}%'
-  OR sku LIKE '%{searchinput}%'
   OR name LIKE '%{searchinput}%'
-  OR cat LIKE '%{searchinput}%'
-  OR size LIKE '%{searchinput}%'
-  OR price LIKE '%{searchinput}%')
+  OR cost LIKE '%{searchinput}%'
+  OR image LIKE '%{searchinput}%'
+  OR stock LIKE '%{searchinput}%')
   ORDER BY {sortcolumn} {sortvar}
   """
   # Execute the SQL code and update the table
@@ -56,16 +54,26 @@ def get_items(columns, searchinput, sortvar, sortcolumn):
 
 app = Flask(__name__, static_url_path='/assets', static_folder='assets');
 
+app.config['SECRET_KEY'] = 'idontknowit'
+
+
+@app.route("/",methods=['GET', 'POST'])
+def default():
+   return redirect("/login")
+
 # Allows for a GET request if needed - but not used
-@app.route("/crud", methods=['GET', 'POST'])
+@app.route('/index', methods=['GET', 'POST'])
 def index():
     # Default values for when the page initially loads
     sortcolumn = 'id'
     sortvar = 'ASC'
     searchinput = ''
-    columns = ['id', 'sku', 'name', 'cat', 'size', 'price']
+    columns = ['id', 'name', 'cost', 'image', 'stock']
     # Execute this function when the page first loads without an action so that there is a table
     data = get_items(columns, searchinput, sortvar, sortcolumn)
+
+    if request.form.get('action') == 'login':
+       return redirect('/login')
 
     if request.method == 'POST':
         print("[LOG] - POST request detected")
@@ -83,7 +91,7 @@ def index():
         # Ensure columns aren't empty. If they are, restore the default value
         if not columns:
             print(f"[LOG] - Columns are set to all off; preventing blank table")
-            columns = ['id', 'sku', 'name', 'cat', 'size', 'price']
+            columns = ['id', 'name', 'cost', 'image', 'stock']
 
         # If the user decides to hit the reset button:
         if action == 'reset':
@@ -92,7 +100,7 @@ def index():
             sortcolumn = 'id'
             sortvar = 'ASC'
             searchinput = ''
-            columns = ['id', 'sku', 'name', 'cat', 'size', 'price']
+            columns = ['id', 'name', 'cost', 'image', 'stock']
             data = get_items(columns, searchinput, sortvar, sortcolumn)
 
         # For all other action types, execute function get_items().
@@ -101,34 +109,40 @@ def index():
 
         print(f"[LOG] - Action: {action}, Search: {searchinput}, Sort: {sortvar}, Sort Column: {sortcolumn}, Columns: {columns}")
 
-    return render_template("website.html", items=data, columns=columns)
+    return render_template("index.html", items=data, columns=columns)
 
-# Allows for a GET request if needed - but not used
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     if request.method == 'POST':
       username = request.form.get('username')
-      password = request.form.get('username')
+      password = request.form.get('password')
 
+      if request.form.get('action') == 'index':
+        return redirect("/index")
+    
       print('attempting to login')
-      with sqlite3.connect('static/main.db') as conn:
+      with sqlite3.connect('assets/shopped_data.db') as conn:
           c = conn.cursor()
           c.row_factory = sqlite3.Row
 
           c.execute("SELECT * FROM tbl_users WHERE username = ?", (username,))
           user = c.fetchone()
-          print('login for', user)
+          print('login for', user['username'])
           if user is not None:
              if user['password'] == password:
                 flash(f'Login successful for {username}')
+                print("yessss it worked bro")
+                return redirect("/index")
              else:
                 flash(f'Login unsuccessful')
+                print("noooo it wronged bro")
           else:
              flash(f'Login unsuccessful')
-             
+             print("bruh idk")
+
     return render_template("login.html")
 
 if __name__ == "__main__":
-  print("[LOG] - Search engine - Initialising")
+  print("[LOG] - Login Page - Initialising")
   # Initialise Debugger
   app.run(debug=True, port=5050);

@@ -2,11 +2,7 @@
     font-family: 'Inter';
     text-decoration: none;
     color:black;
-}
-
-.base {
     margin: 0;
-    height: 1000px;
 }
 
 
@@ -19,19 +15,20 @@
     display: inline-block;
 }
 
-.toplinks {
+.tprightlinks {
     float: right;
     margin-top: 19px;
     margin-right: 19px;
     font-size: 12px;
     font-weight: 600;
+    color: black !important;
 }
 
 .toplinks a:hover{
     text-decoration: underline;
 }
 
-.navbar {
+.topnavbar {
     position: sticky;
     top: 0;
     background-color: rgb(183, 211, 148);
@@ -103,12 +100,12 @@
     margin:70px 0 0 0;
 }
 
-.logininputs{
+.loginbox{
     display:block;
     margin:auto;
     border: 4px solid rgb(125, 157, 87);
     background-color: rgb(225, 241, 204);
     border-radius: 10px;
     width: 40%;
-    height:50%;
+    height:700px;
 }
