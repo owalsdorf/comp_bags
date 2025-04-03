@@ -56,12 +56,11 @@ app = Flask(__name__, static_url_path='/assets', static_folder='assets');
 
 app.config['SECRET_KEY'] = 'idontknowit'
 
-
 @app.route("/",methods=['GET', 'POST'])
 def default():
+   print("[LOG] - Redirecting to login")
    return redirect("/login")
 
-# Allows for a GET request if needed - but not used
 @app.route('/index', methods=['GET', 'POST'])
 def index():
     # Default values for when the page initially loads
@@ -118,28 +117,25 @@ def login():
       password = request.form.get('password')
 
       if request.form.get('action') == 'index':
+        print("[LOG] - Redirecting to index")
         return redirect("/index")
     
-      print('attempting to login')
+      print('[LOG] - Fetching username data')
       with sqlite3.connect('assets/shopped_data.db') as conn:
           c = conn.cursor()
           c.row_factory = sqlite3.Row
 
           c.execute("SELECT * FROM tbl_users WHERE username = ?", (username,))
           user = c.fetchone()
-          print('login for', user['username'])
+          print('[LOG] - Attempting login for', {username})
           if user is not None:
              if user['password'] == password:
-                flash(f'Login successful for {username}')
-                print("yessss it worked bro")
+                print(f'Login successful for {username}')
                 return redirect("/index")
              else:
-                flash(f'Login unsuccessful')
-                print("noooo it wronged bro")
+                print(f'[LOG] - Login unsuccessful, password incorrect')
           else:
-             flash(f'Login unsuccessful')
-             print("bruh idk")
-
+             print(f'[LOG] - Login unsuccessful, incorrect user')
     return render_template("login.html")
 
 if __name__ == "__main__":
