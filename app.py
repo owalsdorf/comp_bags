@@ -52,6 +52,25 @@ def get_items(columns, searchinput, sortvar, sortcolumn):
 
   return changed_table;
 
+def delete_user(user_id):
+   conn = get_db_connection()
+   sql1 = '''DELETE FROM tbl_purchs_items WHERE purchase_id = ?'''
+   sql2 = '''DELETE FROM tbl_purchs WHERE user = ?'''
+   sql3 = '''DELETE FROM tbl_users WHERE id = ?'''
+   conn.execute(sql1, (user_id,))
+   conn.execute(sql2, (user_id,))
+   c = conn.execute(sql3, (user_id,))
+   conn.commit()
+   return c.rowcount
+
+def update_user(name,id):
+   conn = get_db_connection()
+   sql = '''UPDATE tbl_users SET username = ? WHERE id = ?'''
+   c = conn.execute(sql, (name, id))
+   conn.commit()
+   return c.rowcount
+
+
 app = Flask(__name__, static_url_path='/assets', static_folder='assets');
 
 app.config['SECRET_KEY'] = 'idontknowit'
@@ -130,12 +149,15 @@ def login():
           print('[LOG] - Attempting login for', {username})
           if user is not None:
              if user['password'] == password:
-                print(f'Login successful for {username}')
+                flash(f'Logged in successfully for {username}')
                 return redirect("/index")
              else:
-                print(f'[LOG] - Login unsuccessful, password incorrect')
+                flash(f'Password invalid')
           else:
-             print(f'[LOG] - Login unsuccessful, incorrect user')
+             flash(f'Username invalid')
+
+    # print("[LOG] - Updated a username - rows changed: ", update_user('jamesdapro', 2))
+    # print("[LOG] - Deleted a user - rows changed: ", delete_user(2))
     return render_template("login.html")
 
 if __name__ == "__main__":

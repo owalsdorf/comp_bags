@@ -5,7 +5,7 @@ PRAGMA foreign_keys = 1;
 DROP TABLE IF EXISTS tbl_purchs_items;
 DROP TABLE IF EXISTS tbl_purchs;
 DROP TABLE IF EXISTS tbl_filters;
-drop table if exists tbl_filters_names;
+DROP TABLE IF EXISTS tbl_filters_names;
 DROP TABLE IF EXISTS tbl_items;
 DROP TABLE IF EXISTS tbl_users;
 -- Delete the tables if they already exist so that I can easily edit entities.
@@ -74,8 +74,8 @@ CREATE TABLE tbl_purchs(
     id INTEGER,
     total FLOAT,
     sale_date DATETIME,
-  	user VARCHAR(200),
-    PRIMARY KEY(id),
+  	user INTEGER,
+    PRIMARY KEY(id)
   	FOREIGN KEY(user) REFERENCES tbl_users(id)
 );
 

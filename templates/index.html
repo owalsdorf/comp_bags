@@ -90,6 +90,7 @@
       background-color: #dcdcdc;
       cursor: pointer;
     }
+
     .checkbox-box:last-of-type {
       border-top-right-radius: 5px;
       border-bottom-right-radius: 5px;
@@ -107,7 +108,6 @@
     .checkbox-box:hover {
       background-color: #e2e6ea;
     }
-
   </style>
 
   <!-- These are the icons -->
@@ -135,9 +135,9 @@
 
   <main class="d-flex">
     <div class="tab-content flex-grow-1 pt-2">
-        <form method="POST">
-            <button type="submit" name="action" value="login" class="btn btn-primary ms-3">Sign Out</button>
-        </form>
+      <form method="POST">
+        <button type="submit" name="action" value="login" class="btn btn-primary ms-3">Sign Out</button>
+      </form>
       <h1 class="text-center mt-4 mb-5">Laptop Bag Database</h1>
 
       <div class="d-flex align-items-center mx-5 my-2">
@@ -261,7 +261,24 @@
         </tbody>
       </table>
     </div>
-
+    <div class="toast-container position-fixed bottom-0 end-0 p-3">
+      {% with messages = get_flashed_messages(with_categories=true) %}
+      {% if messages %}
+      {% for category, message in messages %}
+      <div class="toast show" role="alert" aria-live="assertive" aria-atomic="true">
+        <div class="toast-header bg-success">
+          <strong class="me-auto text-light">System Alert</strong>
+          <small>Just now</small>
+          <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+        </div>
+        <div class="toast-body bg-success-subtle">
+          {{ message }}
+        </div>
+      </div>
+      {% endfor %}
+      {% endif %}
+      {% endwith %}
+    </div>
 
   </main>
 

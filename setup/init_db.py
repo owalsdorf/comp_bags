@@ -4,7 +4,7 @@ import sqlite3;
 with sqlite3.connect("assets/shopped_data.db") as conn:
 	# Run our sql to initialise the database, using with_resources pattern
 	with open('setup/bags.sql') as f:
-		conn.executescript(f.read());
+		conn.executescript(f.read())
 
 	# Grab cursor
 	cur = conn.cursor();

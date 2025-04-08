@@ -74,14 +74,33 @@
     <form action="{{ url_for('login')}}" method="POST">
         <div class="m-5">
             <label for="username" class="form-label">Username</label>
-            <input type="text" class="form-control" id="username" name="username" placeholder="Username">
+            <input required type="text" class="form-control" id="username" name="username" placeholder="Username">
         </div>
         <div class="m-5">
             <label for="password" class="form-label">Password</label>
-            <input type="text" class="form-control" id="password" name="password" placeholder="Password">
+            <input required type="password" class="form-control" id="password" name="password" placeholder="Password">
         </div>
         <button type="submit" class="btn btn-primary mx-5">Sign In</button>
     </form>
 </div>
+<div class="toast-container position-fixed bottom-0 end-0 p-3">
+    {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+    {% for category, message in messages %}
+    <div class="toast show" role="alert" aria-live="assertive" aria-atomic="true">
+      <div class="toast-header bg-danger">
+        <strong class="me-auto text-light">System Alert</strong>
+        <small>Just now</small>
+        <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+      </div>
+      <div class="toast-body bg-danger-subtle">
+        {{ message }}
+      </div>
+    </div>
+    {% endfor %}
+    {% endif %}
+    {% endwith %}
+  </div>
+  
 
 </html>
