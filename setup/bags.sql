@@ -34,11 +34,11 @@ CREATE TABLE tbl_items(
     PRIMARY KEY (id)
 );
 
-INSERT INTO tbl_items (id, name, cost, image, stock) VALUES(1,'Tramping Bag',200,'img.png',20);
-INSERT INTO tbl_items (id, name, cost, image, stock) VALUES(2,'Pack Liner',15,'img.png',70);
-INSERT INTO tbl_items (id, name, cost, image, stock) VALUES(3,'Sleeping Bag',125,'img.png',30);
-INSERT INTO tbl_items (id, name, cost, image, stock) VALUES(4,'Roll Mat',40,'img.png',25);
-INSERT INTO tbl_items (id, name, cost, image, stock) VALUES(5,'Rain Jacket',100,'img.png',80);
+INSERT INTO tbl_items (id, name, cost, image, stock) VALUES(1,'iPhone 15 pro max case',200,'img.png',20);
+INSERT INTO tbl_items (id, name, cost, image, stock) VALUES(2,'13.5" laptop bag',15,'img.png',70);
+INSERT INTO tbl_items (id, name, cost, image, stock) VALUES(3,'iPhone 13 case',125,'img.png',30);
+INSERT INTO tbl_items (id, name, cost, image, stock) VALUES(4,'17" laptop bag',40,'img.png',25);
+INSERT INTO tbl_items (id, name, cost, image, stock) VALUES(5,'iPhone 12 case',100,'img.png',80);
 
 
 CREATE table tbl_filters_names(
@@ -48,7 +48,7 @@ CREATE table tbl_filters_names(
 );
 INSERT INTO tbl_filters_names (id, name) VALUES(1, 'Essential');
 INSERT INTO tbl_filters_names (id, name) VALUES(2, 'Popular');
-INSERT INTO tbl_filters_names (id, name) VALUES(3, 'Clothing');
+INSERT INTO tbl_filters_names (id, name) VALUES(3, 'New');
 
 
 
