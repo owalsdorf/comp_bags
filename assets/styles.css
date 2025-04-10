@@ -5,7 +5,7 @@
     margin: 0;
 }
 
-
+/* Styling above the navbar */
 .toptitle {
     font-size: 28px;
     font-weight: 100;
@@ -14,7 +14,6 @@
     margin: 10px;
     display: inline-block;
 }
-
 .tprightlinks {
     float: right;
     margin-top: 19px;
@@ -23,24 +22,23 @@
     font-weight: 600;
     color: black !important;
 }
-
 .toplinks a:hover{
     text-decoration: underline;
 }
 
+/* Styling navbar */
 .topnavbar {
     position: sticky;
     top: 0;
     background-color: rgb(183, 211, 148);
     height: 50px;
 }
-
 .topsearchbar{
     display:inline-block;
     border:none;
 }
 
-/* styling navbar buttons + dropdown menus */
+/* Styling navbar buttons + dropdown menus */
 .navdropbtn {
     background-color: rgb(183, 211, 148);
     color: rgb(0, 0, 0);
@@ -75,7 +73,7 @@
     transition: 0.5s;
 }
 
-/* display functions for navbar */
+/* Display functions for navbar */
 .navdropdown-content a:hover {
     background-color: #dadada;
     transition: 0.5s;
@@ -93,13 +91,13 @@
     text-decoration-thickness: 2px;
 }
 
+/* Styling the login box */
 .title{
     font-size: 100px;
     text-align: center;
     font-family: 'Bebas Neue';
     margin:70px 0 0 0;
 }
-
 .loginbox{
     display:block;
     margin:auto;

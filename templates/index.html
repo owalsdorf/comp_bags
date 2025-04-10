@@ -134,6 +134,7 @@
 
 
   <main class="d-flex">
+    <!-- This entire div comes from last year, irrelevant for this internal -->
     <div class="tab-content flex-grow-1 pt-2">
       <form method="POST">
         <button type="submit" name="action" value="login" class="btn btn-primary ms-3">Sign Out</button>
@@ -261,6 +262,8 @@
         </tbody>
       </table>
     </div>
+
+    <!-- Bootstrap toast using Jinja to display the flash string to show successful login -->
     <div class="toast-container position-fixed bottom-0 end-0 p-3">
       {% with messages = get_flashed_messages(with_categories=true) %}
       {% if messages %}

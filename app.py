@@ -26,6 +26,7 @@ def get_db_connection():
   conn.execute(sql);
   return conn
 
+# Code from last year, irrelevant for this internal
 def get_items(columns, searchinput, sortvar, sortcolumn):
   # Establish connection to the database and grab the cursor
   conn = get_db_connection()
@@ -52,8 +53,10 @@ def get_items(columns, searchinput, sortvar, sortcolumn):
 
   return changed_table;
 
+# Function to prove DELETE process
 def delete_user(user_id):
    conn = get_db_connection()
+  #  Deletes from SQL in this order to abide by referential integrity
    sql1 = '''DELETE FROM tbl_purchs_items WHERE purchase_id = ?'''
    sql2 = '''DELETE FROM tbl_purchs WHERE user = ?'''
    sql3 = '''DELETE FROM tbl_users WHERE id = ?'''
@@ -61,25 +64,32 @@ def delete_user(user_id):
    conn.execute(sql2, (user_id,))
    c = conn.execute(sql3, (user_id,))
    conn.commit()
+  #  Return how many rows were affected so that we can check if anything was changed.
    return c.rowcount
 
+# Function to prove UPDATE process
 def update_user(name,id):
    conn = get_db_connection()
    sql = '''UPDATE tbl_users SET username = ? WHERE id = ?'''
+  #  Update someones username according to their ID
    c = conn.execute(sql, (name, id))
    conn.commit()
+  #  Return the number of rows affected to prove this function works
    return c.rowcount
 
 
 app = Flask(__name__, static_url_path='/assets', static_folder='assets');
 
-app.config['SECRET_KEY'] = 'idontknowit'
+# Encrypts the data in the session, this is irrelevant so there is a placeholder for now
+app.config['SECRET_KEY'] = 'secret_key_placeholder'
 
+# When there is no set @app.route, automatically route to /login
 @app.route("/",methods=['GET', 'POST'])
 def default():
    print("[LOG] - Redirecting to login")
    return redirect("/login")
 
+# Index app route from last year - irrelevant for this internal
 @app.route('/index', methods=['GET', 'POST'])
 def index():
     # Default values for when the page initially loads
@@ -129,34 +139,41 @@ def index():
 
     return render_template("index.html", items=data, columns=columns)
 
+# App route for the login page, contains the login function.
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     if request.method == 'POST':
+      # Get the username and password from the front end
       username = request.form.get('username')
       password = request.form.get('password')
 
-      if request.form.get('action') == 'index':
-        print("[LOG] - Redirecting to index")
-        return redirect("/index")
-    
       print('[LOG] - Fetching username data')
       with sqlite3.connect('assets/shopped_data.db') as conn:
           c = conn.cursor()
           c.row_factory = sqlite3.Row
-
+          
+          # Read the username from the database, fetch only one row
           c.execute("SELECT * FROM tbl_users WHERE username = ?", (username,))
           user = c.fetchone()
           print('[LOG] - Attempting login for', {username})
+          # If the username exists in the database:
           if user is not None:
+            #  If the user's password corresponds to that user's password:
              if user['password'] == password:
+                # Redirect the user to the index page + send a flash message that they have logged in
                 flash(f'Logged in successfully for {username}')
                 return redirect("/index")
              else:
+                # If password does not match:
                 flash(f'Password invalid')
           else:
+            #  If username does not match:
              flash(f'Username invalid')
-
+  
+    # Update username function test
     # print("[LOG] - Updated a username - rows changed: ", update_user('jamesdapro', 2))
+   
+    # Delete user function test
     # print("[LOG] - Deleted a user - rows changed: ", delete_user(2))
     return render_template("login.html")
 
