@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, redirect, flash
+from flask import Flask, render_template, request, redirect, flash, session
 import sqlite3
 from sqlite3 import Error;
 import logging
@@ -92,6 +92,12 @@ def default():
 # Index app route from last year - irrelevant for this internal
 @app.route('/index', methods=['GET', 'POST'])
 def index():
+    role = session.get('role', None)  # None if not logged in
+    if request.form.get('action') == 'login':
+       return redirect('/login')
+    # If not admin, don't show the table
+    if role != 'admin':
+        return render_template("index.html", columns=[], items=[], role=role)
     # Default values for when the page initially loads
     sortcolumn = 'id'
     sortvar = 'ASC'
@@ -99,9 +105,6 @@ def index():
     columns = ['id', 'name', 'cost', 'image', 'stock']
     # Execute this function when the page first loads without an action so that there is a table
     data = get_items(columns, searchinput, sortvar, sortcolumn)
-
-    if request.form.get('action') == 'login':
-       return redirect('/login')
 
     if request.method == 'POST':
         print("[LOG] - POST request detected")
@@ -137,7 +140,7 @@ def index():
 
         print(f"[LOG] - Action: {action}, Search: {searchinput}, Sort: {sortvar}, Sort Column: {sortcolumn}, Columns: {columns}")
 
-    return render_template("index.html", items=data, columns=columns)
+    return render_template("index.html", items=data, columns=columns, role=role)
 
 # App route for the login page, contains the login function.
 @app.route('/login', methods=['GET', 'POST'])
@@ -160,6 +163,8 @@ def login():
           if user is not None:
             #  If the user's password corresponds to that user's password:
              if user['password'] == password:
+                session['username'] = username
+                session['role'] = user['role'] 
                 # Redirect the user to the index page + send a flash message that they have logged in
                 flash(f'Logged in successfully for {username}')
                 return redirect("/index")
