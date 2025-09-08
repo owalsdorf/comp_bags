@@ -140,7 +140,7 @@ def index():
 
         print(f"[LOG] - Action: {action}, Search: {searchinput}, Sort: {sortvar}, Sort Column: {sortcolumn}, Columns: {columns}")
 
-    return render_template("index.html", items=data, columns=columns, role=role)
+    return render_template("shop.html", items=data, columns=columns, role=role)
 
 # App route for the login page, contains the login function.
 @app.route('/login', methods=['GET', 'POST'])
