@@ -2,6 +2,8 @@
 PRAGMA foreign_keys = 1;
 
 
+
+DROP TABLE IF EXISTS tbl_carts;
 DROP TABLE IF EXISTS tbl_purchs_items;
 DROP TABLE IF EXISTS tbl_purchs;
 DROP TABLE IF EXISTS tbl_filters;
@@ -9,6 +11,8 @@ DROP TABLE IF EXISTS tbl_filters_names;
 DROP TABLE IF EXISTS tbl_items;
 DROP TABLE IF EXISTS tbl_users;
 -- Delete the tables if they already exist so that I can easily edit entities.
+
+
 
 CREATE TABLE tbl_users(
   	id INTEGER,
@@ -34,11 +38,29 @@ CREATE TABLE tbl_items(
     PRIMARY KEY (id)
 );
 
-INSERT INTO tbl_items (id, name, cost, image, stock) VALUES(1,'iPhone 15 pro max case',200,'img.png',20);
-INSERT INTO tbl_items (id, name, cost, image, stock) VALUES(2,'13.5" laptop bag',15,'img.png',70);
-INSERT INTO tbl_items (id, name, cost, image, stock) VALUES(3,'iPhone 13 case',125,'img.png',30);
-INSERT INTO tbl_items (id, name, cost, image, stock) VALUES(4,'17" laptop bag',40,'img.png',25);
-INSERT INTO tbl_items (id, name, cost, image, stock) VALUES(5,'iPhone 12 case',100,'img.png',80);
+INSERT INTO tbl_items (id, name, cost, image, stock) VALUES(1,'iPhone 15 pro max case',30,'img.png',20);
+INSERT INTO tbl_items (id, name, cost, image, stock) VALUES(2,'13.5" laptop bag',50,'img.png',70);
+INSERT INTO tbl_items (id, name, cost, image, stock) VALUES(3,'iPhone 13 case',20,'img.png',30);
+INSERT INTO tbl_items (id, name, cost, image, stock) VALUES(4,'17" laptop bag',90,'img.png',25);
+INSERT INTO tbl_items (id, name, cost, image, stock) VALUES(5,'Cat sticker',2.50,'img.png',80);
+INSERT INTO tbl_items (id, name, cost, image, stock) VALUES(6,'14" laptop bag',60,'img.png',20);
+INSERT INTO tbl_items (id, name, cost, image, stock) VALUES(7,'2021 Macbook pro case',75,'img.png',10);
+INSERT INTO tbl_items (id, name, cost, image, stock) VALUES(8,'15" Laptop Case',60,'img.png',200);
+INSERT INTO tbl_items (id, name, cost, image, stock) VALUES(9,'iPhone 14 case',30,'img.png',50);
+INSERT INTO tbl_items (id, name, cost, image, stock) VALUES(10,'iPhone 12 mini case',20,'img.png',40);
+
+
+CREATE TABLE tbl_carts(
+  userid INTEGER,
+  product INTEGER,
+  FOREIGN KEY(userid) REFERENCES tbl_users(id),
+  FOREIGN KEY(product) REFERENCES tbl_items(id)
+  );
+
+INSERT INTO tbl_carts (userid, product) VALUES(1, 3);
+INSERT INTO tbl_carts (userid, product) VALUES(1, 3);
+INSERT INTO tbl_carts (userid, product) VALUES(1, 4);
+INSERT INTO tbl_carts (userid, product) VALUES(1, 1);
 
 
 CREATE table tbl_filters_names(
@@ -68,6 +90,14 @@ INSERT INTO tbl_filters (id, name_id) VALUES(4,1);
 INSERT INTO tbl_filters (id, name_id) VALUES(5,1);
 INSERT INTO tbl_filters (id, name_id) VALUES(5,3);
 INSERT INTO tbl_filters (id, name_id) VALUES(5,2);
+INSERT INTO tbl_filters (id, name_id) VALUES(6,3);
+INSERT INTO tbl_filters (id, name_id) VALUES(6,1);
+INSERT INTO tbl_filters (id, name_id) VALUES(7,3);
+INSERT INTO tbl_filters (id, name_id) VALUES(8,2);
+INSERT INTO tbl_filters (id, name_id) VALUES(8,1);
+INSERT INTO tbl_filters (id, name_id) VALUES(9,1);
+INSERT INTO tbl_filters (id, name_id) VALUES(10,1);
+INSERT INTO tbl_filters (id, name_id) VALUES(10,3);
 
 
 CREATE TABLE tbl_purchs(

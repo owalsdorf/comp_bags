@@ -27,16 +27,15 @@ def get_db_connection():
   return conn
 
 # Code from last year, irrelevant for this internal
-def get_items(columns, searchinput, sortvar, sortcolumn):
+def get_items(searchinput, sortvar, sortcolumn):
   # Establish connection to the database and grab the cursor
   conn = get_db_connection()
   cur = conn.cursor()
   # Rewrite the string list to remove the apostrophes so that it can work in the SQL function
-  sqlcolumns = ", ".join(columns)
   print("[LOG] - Attempting to execute SQL function")
     # Each function is put into place in the SQL code
   sql = f"""
-  SELECT {sqlcolumns} FROM tbl_items
+  SELECT * FROM tbl_items
   WHERE (id LIKE '%{searchinput}%'
   OR name LIKE '%{searchinput}%'
   OR cost LIKE '%{searchinput}%'
@@ -47,36 +46,147 @@ def get_items(columns, searchinput, sortvar, sortcolumn):
   # Execute the SQL code and update the table
   changed_table = cur.execute(sql).fetchall()
   print(f"[LOG] - Table has been updated. Sort type: {sortvar}, column sorted: {sortcolumn}, search input: {searchinput}.")
-  print(f"[LOG] - Columns selected: {sqlcolumns}.")
   print("---------------------------------------------------------------")
   conn.close()
 
   return changed_table;
 
-# Function to prove DELETE process
-def delete_user(user_id):
-   conn = get_db_connection()
-  #  Deletes from SQL in this order to abide by referential integrity
-   sql1 = '''DELETE FROM tbl_purchs_items WHERE purchase_id = ?'''
-   sql2 = '''DELETE FROM tbl_purchs WHERE user = ?'''
-   sql3 = '''DELETE FROM tbl_users WHERE id = ?'''
-   conn.execute(sql1, (user_id,))
-   conn.execute(sql2, (user_id,))
-   c = conn.execute(sql3, (user_id,))
-   conn.commit()
-  #  Return how many rows were affected so that we can check if anything was changed.
-   return c.rowcount
+def cat_description_get():
+    # Establish connection to the database and grab the cursor
+    conn = get_db_connection()
+    cur = conn.cursor()
 
-# Function to prove UPDATE process
-def update_user(name,id):
-   conn = get_db_connection()
-   sql = '''UPDATE tbl_users SET username = ? WHERE id = ?'''
-  #  Update someones username according to their ID
-   c = conn.execute(sql, (name, id))
-   conn.commit()
-  #  Return the number of rows affected to prove this function works
-   return c.rowcount
+    # Fetching all content from tbl_items, filters, and filters_names
+    all_items = cur.execute('SELECT * FROM tbl_items').fetchall()
+    all_categories = cur.execute('SELECT * FROM tbl_filters').fetchall()
+    all_filters = cur.execute('SELECT * FROM tbl_filters_names').fetchall()
+    all_carts = cur.execute('SELECT * FROM tbl_carts').fetchall()
+    print("[LOG] - All items, filters, and filter names have been selected")
+    print("---------------------------------------------------------------")
+    cur.close()
+    
+    return all_items, all_categories, all_filters, all_carts
 
+# Adding to cart function
+def add_cart(c_data):
+    conn = get_db_connection()
+    sql = """INSERT INTO tbl_carts
+    (userid, product)
+    VALUES(?,?)
+    """
+    conn.execute(sql, c_data)
+    print(f"[LOG] - Added item to cart with id and product id: {c_data}")
+    conn.commit()
+    conn.close()
+
+# Function to update an item
+def update_item(i_name):
+    # Establishing a connection to the database
+	conn = get_db_connection()
+    # Code to execute in SQL
+	sql = """
+            UPDATE tbl_items SET
+            name = ?,
+            cost = ?,
+            image = ?,
+            stock = ?
+            WHERE id = ?
+            """
+    # Execute the SQL code using the values in i_name
+	conn.execute(sql, i_name).rowcount
+	print(f"[LOG] - Updated item with name and values: {i_name}")
+    # Committing the current action
+	conn.commit()
+    # Closing connection to database
+	conn.close()
+
+def update_name(n_name):
+	conn = get_db_connection()
+	sql = """
+            UPDATE tbl_filters_names SET
+            name = ?
+            WHERE id = ?
+            """
+	conn.execute(sql, n_name)
+	print(f"[LOG] - Updated filter name with title and ID: {n_name}")
+	conn.commit()
+	conn.close()
+
+# Function to add an item
+def add_item(i_data):
+    conn = get_db_connection()
+    # The sql execute code is change from update fields to adding fields
+    sql = """
+    INSERT INTO tbl_items 
+    (name, cost, image, stock) 
+    VALUES(?,?,?,?)"""
+    # Execute the sql code with i_data while also using the lastrowid in order to make the new primary key ID
+    conn.execute(sql, i_data).lastrowid    
+    print(f"[LOG] - Added new item with name and values: {i_data}")
+    conn.commit()
+    conn.close()
+
+def add_filter(f_data):
+    conn = get_db_connection()
+    sql = """
+    INSERT INTO tbl_filters 
+    (id, name_id) 
+    VALUES(?,?)"""
+    conn.execute(sql, f_data)
+    print(f"[LOG] - Added new filter with values: {f_data}")
+    conn.commit()
+    conn.close()
+
+def add_name(n_data):
+    conn = get_db_connection()
+    sql = """
+    INSERT INTO tbl_filters_names (name) VALUES(?)
+    """
+    conn.execute(sql, (n_data,)).lastrowid
+    print(f"[LOG] - Added new filter name with title and ID: {n_data}")
+    conn.commit()
+    conn.close()
+
+def remove_name(n_item):
+    conn = get_db_connection()
+    sql = """
+    DELETE FROM tbl_filters_names WHERE id = ? AND name = ?;
+    """
+    conn.execute(sql, n_item)
+    print(f"[LOG] - Removed filter name with ID and name: {n_item}")
+    conn.commit()
+    conn.close()
+
+def remove_filter(f_item):
+    sql = """
+    DELETE FROM tbl_filters WHERE id = ? AND name_id = ?;
+    """
+    conn = get_db_connection()
+    cur = conn.cursor();
+    remove_filter_id = cur.execute(sql, f_item)
+    print(f"[LOG] - Removed filter named: {remove_filter_id}")
+    conn.commit()
+    conn.close()
+
+# Function to delete an item
+def remove_item(i_item):
+    # Deleting from the database using the DELETE function now
+    sql = """
+    DELETE FROM tbl_items WHERE id = ?;
+    """
+    conn = get_db_connection()
+    cur = conn.cursor();
+    remove_name_id = cur.execute(sql, i_item)
+    print(f"[LOG] - Removed item with id: {remove_name_id}")
+    conn.commit()
+    conn.close()
+
+def remove_cart(c_item):
+    sql = """
+    DELETE FROM tbl_carts WHERE userid = ? AND product = ?;
+    """
+    conn = get_db_connection()
+    
 
 app = Flask(__name__, static_url_path='/assets', static_folder='assets');
 
@@ -89,22 +199,23 @@ def default():
    print("[LOG] - Redirecting to login")
    return redirect("/login")
 
-# Index app route from last year - irrelevant for this internal
-@app.route('/index', methods=['GET', 'POST'])
+# Shop app route
+@app.route('/shop', methods=['GET', 'POST'])
 def index():
+    
     role = session.get('role', None)  # None if not logged in
+    user = session.get('id', None)
     if request.form.get('action') == 'login':
        return redirect('/login')
-    # If not admin, don't show the table
-    if role != 'admin':
-        return render_template("index.html", columns=[], items=[], role=role)
+    if request.form.get('action') == 'admin':
+       return redirect('/admin')
+
     # Default values for when the page initially loads
     sortcolumn = 'id'
     sortvar = 'ASC'
     searchinput = ''
-    columns = ['id', 'name', 'cost', 'image', 'stock']
     # Execute this function when the page first loads without an action so that there is a table
-    data = get_items(columns, searchinput, sortvar, sortcolumn)
+    data = get_items(searchinput, sortvar, sortcolumn)
 
     if request.method == 'POST':
         print("[LOG] - POST request detected")
@@ -116,31 +227,133 @@ def index():
         searchinput = request.form.get("search", "")
         sortvar = request.form.get("sortMethod", "ASC")
         sortcolumn = request.form.get("sortColumn", "id")
-        # Get the columns in a list
-        columns = request.form.getlist("columns")
-
-        # Ensure columns aren't empty. If they are, restore the default value
-        if not columns:
-            print(f"[LOG] - Columns are set to all off; preventing blank table")
-            columns = ['id', 'name', 'cost', 'image', 'stock']
-
-        # If the user decides to hit the reset button:
-        if action == 'reset':
-            print("[LOG] - Restoring to default settings.")
-            # All values are restored to the aforementioned default values
-            sortcolumn = 'id'
-            sortvar = 'ASC'
-            searchinput = ''
-            columns = ['id', 'name', 'cost', 'image', 'stock']
-            data = get_items(columns, searchinput, sortvar, sortcolumn)
 
         # For all other action types, execute function get_items().
-        elif action in ['filtering', 'sorting', 'searching']:
-            data = get_items(columns, searchinput, sortvar, sortcolumn)
+        if action in ['sorting', 'searching']:
+          data = get_items(searchinput, sortvar, sortcolumn)
 
-        print(f"[LOG] - Action: {action}, Search: {searchinput}, Sort: {sortvar}, Sort Column: {sortcolumn}, Columns: {columns}")
+        if action == 'cart':
+            cart_id = request.form.get('userid')
+            product_id = request.form.get('productid')
 
-    return render_template("shop.html", items=data, columns=columns, role=role)
+            c_data = (cart_id, product_id)
+            print(f"[LOG] - Trying to add to cart with values: {c_data}")
+            add_cart(c_data)
+            return redirect('/shop')
+
+        print(f"[LOG] - Action: {action}, Search: {searchinput}, Sort: {sortvar}, Sort Column: {sortcolumn}")
+        
+    return render_template("shop.html", items=data, role=role, user=user)
+
+
+@app.route('/admin', methods=['GET', 'POST'])
+def admin():
+
+    data = cat_description_get()
+
+    role = session.get('role', None)  # None if not logged in
+    if request.form.get('action') == 'login':
+       return redirect('/login')
+    if request.form.get('action') == 'shop':
+       return redirect('/shop')
+    # If not admin, don't show the table
+    if role != 'admin':
+      return render_template("shop.html")
+    
+    # This looks out for POST requests from modals
+    if request.method == 'POST':
+        # Find what action the modal was looking for, and execute the function for the action the modal stated below
+        action = request.form.get("action")
+
+        # If the modal was to edit an item
+        if action == 'saveItemBtn':
+            print("[LOG] - Processing POST request for editing an item")
+            # Receiving the ID from the HTML form
+            id = request.form.get('editID')
+            # Specifying function i_name with values for each instance of ? in update_item(i_name)
+            i_name = (
+                request.form.get(f"editName{id}"),
+                request.form.get(f"editCost{id}"),
+	            request.form.get(f"editImage{id}"),
+                request.form.get(f"editStock{id}"),
+	            id
+            )
+            # Execute update_item(i_name)
+            update_item(i_name)
+            return redirect('/admin')
+        
+        if action == 'saveNameBtn':
+            print("[LOG] - Processing POST request for editing a filter name")
+            id = request.form.get('nameID')
+            name = request.form.get(f'editName{id}')
+            n_name = (name,id)
+            update_name(n_name)
+            return redirect('/admin')
+
+        # If the modal was to add an item
+        if action == 'add_item_form':
+            print("[LOG] - Processing POST request to add an item")
+            # Finding all values from the addItem___ inputs from the modals
+            name = request.form.get("addItemName")
+            cost = request.form.get("addItemCost")
+            image = request.form.get("addItemImage")
+            stock = request.form.get("addItemStock")
+            # Specifying i_data with values for each instance of ? in add_item(i_data)
+            i_data = (name,cost,image,stock)
+            # Execute adding an item
+            add_item(i_data)
+            return redirect('/admin')
+        
+        if action == 'add_filter_form':
+            print("[LOG] - Processing POST request to add a filter")
+            id = request.form.get("addFilterID")
+            name_id = request.form.get("addFilterNameID")
+            f_data = (id, name_id)
+            add_filter(f_data)
+            return redirect('/admin')
+
+        if action == 'add_filter_name_form':
+            print("[LOG] - Processing POST request to add a filter name")
+            n_data = request.form.get("addNameFilter")
+            add_name(n_data)
+            return redirect('/admin')
+
+        if action == 'deleteFilterBtn':
+            print("[LOG] - Processing POST request to delete a filter item")
+            id = request.form.get("filterRemoveID")
+            name_id = request.form.get("filterRemoveNameID")
+            f_item = (id, name_id)
+            remove_filter(f_item)
+            return redirect('/admin')
+        
+        if action == 'deleteNameBtn':
+            print("[LOG] - Processing POST request to delete a filter name")
+            id = request.form.get("filterNameRemoveID")
+            name_id = request.form.get("filterNameRemoveNameID")
+            n_item = (id, name_id)
+            remove_name(n_item)
+            return redirect('/admin')
+
+        if action == 'deleteCartBtn':
+            print("[LOG] - Processing POST request to delete a cart item")
+            id = request.form.get("cartRemoveProductID")
+            product = request.form.get("cartRemoveID")
+            c_item = (id, product)
+            remove_cart(c_item)
+            return redirect('/admin')
+
+        # If the modal was to delete an item        
+        if action == 'deleteItemBtn':
+            print("[LOG] - Processing POST request to delete an item")
+            # Find the id of the item to be deleted
+            id = request.form.get("itemRemoveID")
+            # ? = id
+            i_item = (id)
+            # Execute function to delete item
+            remove_item(i_item)
+            return redirect('/admin')
+
+    return render_template("index.html", items=data[0], filters=data[1], names=data[2], carts=data[3], role=role)
 
 # App route for the login page, contains the login function.
 @app.route('/login', methods=['GET', 'POST'])
@@ -164,10 +377,11 @@ def login():
             #  If the user's password corresponds to that user's password:
              if user['password'] == password:
                 session['username'] = username
-                session['role'] = user['role'] 
+                session['role'] = user['role']
+                session['id'] = user['id'] 
                 # Redirect the user to the index page + send a flash message that they have logged in
                 flash(f'Logged in successfully for {username}')
-                return redirect("/index")
+                return redirect("/shop")
              else:
                 # If password does not match:
                 flash(f'Password invalid')
@@ -183,6 +397,8 @@ def login():
     return render_template("login.html")
 
 if __name__ == "__main__":
-  print("[LOG] - Login Page - Initialising")
+  print("[LOG] - Fullstack Webpage - Initialising")
   # Initialise Debugger
   app.run(debug=True, port=5050);
+
+

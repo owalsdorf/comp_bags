@@ -133,158 +133,529 @@
   </svg>
 
   <main class="d-flex">
-    <!-- This entire div comes from last year, irrelevant for this internal -->
-    <div class="tab-content flex-grow-1 pt-2">
-      <form method="POST">
-        <button type="submit" name="action" value="login" class="btn btn-primary ms-3">Sign Out</button>
-      </form>
-      <h1 class="text-center mt-4 mb-5">Laptop Bag Database</h1>
-
-      <div class="d-flex align-items-center mx-5 my-2">
-        <!-- Add the search bar -->
-        <form method="POST" class="me-3">
-          <!-- It has a value that depends on what the previous search value was. If the previous value was nothing, this value is equal to '' -->
-          <input type="text" name="search" placeholder="Search..." class="form-control"
-            style="width: 250px; margin-right: 50px;" value="{{ request.form.get('search', '') }}">
-          <!-- Hidden values for all four functions allow function stacking -->
-          <input type="hidden" name="action" value="searching">
-          <input type="hidden" name="sortMethod" value="{{ request.form.get('sortMethod', 'ASC') }}">
-          <input type="hidden" name="sortColumn" value="{{ request.form.get('sortColumn', 'id') }}">
-          {% for c in columns %}
-          <input type="hidden" name="columns" value="{{ c }}">
-          {% endfor %}
-          <button type="submit" style="display: none;"></button>
-        </form>
-
-        <form method="POST" class="d-flex align-items-center flex-wrap">
-          <!-- Title for clarity -->
-          <h4 class="mx-2 mt-1">Toggle Columns:</h4>
-          <label class="checkbox-box">
-            <!-- Every checkbox has an individual value -->
-            <!-- Has deterministic code to see if the checkbox should be checked or unchecked upon loading -->
-            <!-- For ID, if 'id' is in the string for columns, check the box. If not, uncheck it. -->
-            <input type="checkbox" name="columns" value="id" {% if 'id' in columns %} checked {% endif %}> ID
-          </label>
-          <label class="checkbox-box">
-            <input type="checkbox" name="columns" value="name" {% if 'name' in columns %} checked {% endif %}> Name
-          </label>
-          <label class="checkbox-box">
-            <input type="checkbox" name="columns" value="cost" {% if 'cost' in columns %} checked {% endif %}> Cost
-          </label>
-          <label class="checkbox-box">
-            <input type="checkbox" name="columns" value="image" {% if 'image' in columns %} checked {% endif %}> Image
-            Size
-          </label>
-          <label class="checkbox-box">
-            <input type="checkbox" name="columns" value="stock" {% if 'stock' in columns %} checked {% endif %}> Stock
-          </label>
-          <!-- Hidden values for function stacking -->
-          <input type="hidden" name="action" value="filtering">
-          <input type="hidden" name="search" value="{{ request.form.get('search', '') }}">
-          <input type="hidden" name="sortMethod" value="{{ request.form.get('sortMethod', 'ASC') }}">
-          <input type="hidden" name="sortColumn" value="{{ request.form.get('sortColumn', 'id') }}">
-          <button type="submit" class="btn btn-secondary ms-3">Update Columns</button>
-        </form>
-
-
-        <!-- Restore defaults button. No function stackng required. -->
+    <div class="d-flex flex-column p-3 text-bg-dark" style="width: 280px; height: 100vh;">
+      <a href="#" class="d-flex align-items-center mb-3 mb-md-0 me-md-auto text-white text-decoration-none">
+        Administrator Dashboard
+      </a>
+      <hr>
+      <!-- Buttons to add new content -->
+      <button type="button"
+        style="padding-top: 2px; padding-left: 13px; padding-right: 10px; padding-top: 7px; width: 100%;"
+        class="btn btn-primary" data-bs-toggle="modal" type="button" href="#" data-bs-target="#addItemModal">Add New
+        Item
+        <!-- Referencing the modal named addItemModal -->
+        <svg class="bi pe-none me-2" width="16" height="16">
+          <use xlink:href="#bookmark" />
+        </svg></button>
+      <button type="button"
+        style="padding-top: 2px; padding-left: 13px; padding-right: 10px; padding-top: 7px; width: 100%; margin-top:10px;"
+        class="btn btn-primary" data-bs-toggle="modal" type="button" href="#" data-bs-target="#addFilterModal">Add New
+        Filter
+        <svg class="bi pe-none me-2" width="16" height="16">
+          <use xlink:href="#bookmark" />
+        </svg></button>
+      <button type="button"
+        style="padding-top: 2px; padding-left: 13px; padding-right: 10px; padding-top: 7px; width: 100%; margin-top:10px;"
+        class="btn btn-primary" data-bs-toggle="modal" type="button" href="#" data-bs-target="#addNameModal">Add New
+        Filter Name
+        <svg class="bi pe-none me-2" width="16" height="16">
+          <use xlink:href="#bookmark" />
+        </svg></button>
+      <hr>
+      <!-- Buttons to navigate from table to table -->
+      <ul class="nav nav-pills flex-column mb-auto">
+        <li class="nav-item">
+          <a class="nav-link active btn btn-toggle d-inline-flex align-items-center rounded border-0 collapsed"
+            data-bs-toggle="tab" aria-current="page" href="#items">
+            <!-- Referencing items -->
+            Products
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link btn btn-toggle d-inline-flex align-items-center rounded border-0 collapsed"
+            data-bs-toggle="tab" href="#filters">
+            Filters
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link btn btn-toggle d-inline-flex align-items-center rounded border-0 collapsed"
+            data-bs-toggle="tab" href="#filternames">
+            Filter Names
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link btn btn-toggle d-inline-flex align-items-center rounded border-0 collapsed"
+            data-bs-toggle="tab" href="#carts">
+            Carts
+          </a>
+        </li>
+      </ul>
+      <hr>
+      <!-- User icon and name at the bottom - irrelevant -->
+      <div class="contaner">
         <form method="POST">
-          <input type="hidden" name="action" value="reset">
-          <button type="submit" class="btn btn-primary ms-3">Restore Defaults</button>
+          <button type="submit" name="action" value="shop" class="d-inline btn btn-secondary">
+            Return to Shop
+          </button>
+        </form>
+        <form method="POST">
+          <button type="submit" name="action" value="login" class="d-inline btn btn-secondary mt-3">
+            Log Out
+          </button>
         </form>
       </div>
+    </div>
+    </ul>
 
-      {% if role == 'admin' %}
-      <!-- Item Table -->
-      <table class="thing table table-striped table-hover table-bordered align-middle mx-5 my-4" style="width: 93%;">
-        <thead>
-          <tr>
-            {% for c in columns %}
-            <th scope="col">
-              <div class="d-flex align-items-center" style="font-size: 15px;">
-                <!-- Headers of each column -->
-                <!-- The '| title' ensures that the first letter of each title is capitalised  -->
-                {{ c | title }}
-                <div class="dropdown ms-2">
-                  <!-- Sort dropdown -->
-                  <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown"
-                    aria-expanded="false" style="font-size: 13px;">
-                    Sort
-                  </button>
-                  <ul class="dropdown-menu">
-                    <form method="POST">
-                      <li>
-                        <!-- Inside the dropdown menu, has two types of sort method. Descending or ascending -->
-                        <!-- Both sorts have hidden values for function stacking. The only difference is the value of sortMethod. -->
-                        <button type="submit" name="action" value="sorting" class="dropdown-item"
-                          style="font-size: 13px;">
-                          Descending
-                          <input type="hidden" name="sortMethod" value="DESC">
-                          <input type="hidden" name="sortColumn" value="{{ c }}">
-                          <input type="hidden" name="search" value="{{ request.form.get('search', '') }}">
-                          {% for c in columns %}
-                          <input type="hidden" name="columns" value="{{ c }}">
-                          {% endfor %}
-                        </button>
-                      </li>
+    <!-- Table bodies -->
+    <div class="tab-content flex-grow-1 pt-2">
+      <div class="tab-pane fade show active all-items" id="items">
+        <h1 style="margin-left:50px; margin-top:30px; margin-bottom:-40px;">Items</h1>
+        <!-- Item Table -->
+        <table class="thing table table-striped table-hover table-bordered align-middle"
+          style="margin-left: 4%; margin-top: 50px; width: 90%;">
+          <thead>
+            <tr>
+              <!-- All columns -->
+              <th scope="col">ID</th>
+              <th scope="col">Name</th>
+              <th scope="col">Cost</th>
+              <th scope="col">Image</th>
+              <th scope="col">Filters</th>
+              <th scope="col">Stock</th>
+              <th scope="col">Edit</th>
+            </tr>
+          </thead>
+          <tbody class="table-group-divider">
+            <!-- This for loop is used to access tbl_items   -->
+            {% for row in items %}
+            <tr>
+              <!-- This finds the values for the given column by specifying between the speech marks -->
+              <th scope="row">{{ row['id'] }}</th>
+              <td>{{ row['name'] }}</td>
+              <td>{{ row['cost'] }}</td>
+              <td>{{ row['image'] }}</td>
+              <td>
+                <!-- For loop which allows for filter_ids to appear under the name of the name_id -->
+                {% set tag_names = [] %}
+                {% for f in filters %}
+                <!-- If the item ID is the same as the filter ID -->
+                {% if row['id'] == f['id'] %}
+                {% for n in names %}
+                <!-- If the filter ID is the same as the name ID -->
+                {% if f['name_id'] == n['id'] %}
+                <!-- Show the name of the filter -->
+                {% set _ = tag_names.append(n['name']) %}
+                {% endif %}
+                {% endfor %}
+                {% endif %}
+                {% endfor %}
+                <!-- Separating filters with commas for clarity  -->
+                {{ tag_names | join(', ') }}
+              </td>
+              <td>{{ row['stock'] }}</td>
+              <td>
+                <!-- Button to access edit item modal -->
+                <button type="button" style="padding-top: 2px; padding-left: 6px; padding-right: 6px;"
+                  class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#itemModal{{ row['id'] }}">
+                  <svg width="20" height="20" fill="white">
+                    <use xlink:href="#gear" />
+                  </svg></button>
+
+                <!-- Button to access delete item modal -->
+                <button type="button" style="padding-top: 2px; padding-left: 6px; padding-right: 6px;"
+                  class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#deleteItemModal{{ row['id'] }}">
+                  <svg width="20" height="20" fill="white">
+                    <use xlink:href="#remove" />
+                  </svg></button>
+
+                <!-- Edit item modal -->
+                <div class="modal" id="itemModal{{ row['id'] }}" tabindex="-1"
+                  aria-labelledby="itemModalLabel{{ row['id'] }}" aria-hidden="true">
+                  <div class="modal-dialog modal-dialog-centered">
+                    <!-- Specify this as a POST form -->
+                    <form method="POST" style="width:1000px;">
+                      <!-- editID for reference in app.py -->
+                      <input type="hidden" name="editID" value="{{ row['id'] }}">
+                      <div class="modal-content">
+                        <div class="modal-header">
+                          <h1 class="modal-title fs-5" id="itemModalLabel{{ row['id'] }}">Edit Details</h1>
+                          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                          <form>
+                            <div class="mb-3">
+                              <!-- ID of item - disabled -->
+                              <label for="recipient-name" class="col-form-label">ID</label>
+                              <input type="text" class="form-control" value="{{ row['id'] }}" disabled>
+                            </div>
+                            <!-- Each input box has grabbed the value of the column by referencing the column in tbl_items -->
+                            <div class="mb-3">
+                              <label for="recipient-name" class="col-form-label">Product Name</label>
+                              <input type="text" class="form-control" name="editName{{ row['id'] }}"
+                                value="{{ row['name'] }}" required>
+                              <!-- 'required' forces the user to place an input -->
+                            </div>
+                            <div class="mb-3">
+                              <label for="recipient-name" class="col-form-label">Cost</label>
+                              <input type="number" class="form-control" name="editCost{{ row['id'] }}"
+                                value="{{ row['cost'] }}" min="0.01" step="0.01" required>
+                              <!-- min="" and step="" forces the user to a minimum input of X and decimal placings of X -->
+                            </div>
+                            <div class="mb-3">
+                              <label for="message-text" class="col-form-label">Image Location</label>
+                              <textarea class="form-control" name="editImage{{ row['id'] }}"
+                                value="{{ row['image'] }}">{{ row['image'] }}</textarea>
+                            </div>
+                            <div class="mb-3">
+                              <label for="recipient-name" class="col-form-label">Stock</label>
+                              <input type="number" class="form-control" name="editStock{{ row['id'] }}"
+                                value="{{ row['stock'] }}" min="0" required>
+                            </div>
+                          </form>
+                        </div>
+                        <div class="modal-footer">
+                          <!-- Cancel edit button -->
+                          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                          <!-- Save changes button - named as action to refer in the app.py as saveItemBtn to execute that function's code -->
+                          <button type="submit" class="btn btn-primary" name="action" value="saveItemBtn">Save
+                            Changes</button>
+                        </div>
+                      </div>
                     </form>
-                    <form method="POST">
-                      <li>
-                        <button type="submit" name="action" value="sorting" class="dropdown-item"
-                          style="font-size: 13px;">
-                          Ascending
-                          <input type="hidden" name="sortMethod" value="ASC">
-                          <input type="hidden" name="sortColumn" value="{{ c }}">
-                          <input type="hidden" name="search" value="{{ request.form.get('search', '') }}">
-                          {% for c in columns %}
-                          <input type="hidden" name="columns" value="{{ c }}">
-                          {% endfor %}
-                        </button>
-                      </li>
-                    </form>
-                  </ul>
+                  </div>
                 </div>
-              </div>
-            </th>
+
+                <!-- Delete item modal -->
+                <div class="modal" id="deleteItemModal{{ row['id'] }}" tabindex="-1"
+                  aria-labelledby="deleteItemModalLabel{{ row['id'] }}" aria-hidden="true">
+                  <div class="modal-dialog modal-dialog-centered">
+                    <form method="POST" style="width:1000px;">
+                      <div class="modal-content">
+                        <!-- Hidden id to reference which item to remove using the primary key of ID -->
+                        <input type="hidden" name="itemRemoveID" value="{{ row['id'] }}">
+                        <div class="modal-header">
+                          <h1 class="modal-title fs-5" id="deleteItemModalLabel{{ row['id'] }}">Do you want to
+                            delete this item?</h1>
+                          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-footer">
+                          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                          <!-- "action" is deleteItemBtn -->
+                          <button type="submit" class="btn btn-primary" name="action"
+                            value="deleteItemBtn">Proceed</button>
+                        </div>
+                      </div>
+                    </form>
+                  </div>
+                </div>
+              </td>
+            </tr>
+            <!-- End the for loop for tbl_items since it is no longer referenced -->
             {% endfor %}
-          </tr>
-        </thead>
-        <tbody class="table-group-divider">
-          <!-- Cycle through each item and display the corresponding field -->
-          {% for row in items %}
-          <tr>
-            {% for c in columns %}
-            <!-- row[c] means that the table goes field by field based off of which column it is - determined by c -->
-            <td style="font-size: 13px;">{{ row[c] }}</td>
+          </tbody>
+        </table>
+      </div>
+      <div class="tab-pane fade" id="filters">
+        <h1 style="margin-left:50px; margin-top:30px; margin-bottom:-40px;">Filters</h1>
+        <!-- Filters Table -->
+        <table class="thing table table-striped table-hover table-bordered align-middle"
+          style="margin-left: 4%; margin-top: 50px; width: 90%;">
+          <thead>
+            <tr>
+              <th scope="col">ID</th>
+              <th scope="col">Name ID</th>
+              <th scope="col">Delete</th>
+            </tr>
+          </thead>
+          <tbody class="table-group-divider">
+            {% for f in filters %}
+            <tr>
+              <th scope="row">{{ f['id'] }}</th>
+              <td>
+                {% for n in names %}
+                {% if f['name_id'] == n['id'] %}
+                {{ n['name'] }}
+                {% endif %}
+                {% endfor %}
+              </td>
+              <td>
+
+                <button type="button" style="padding-top: 2px; padding-left: 6px; padding-right: 6px;"
+                  class="btn btn-secondary" data-bs-toggle="modal"
+                  data-bs-target="#filterDeleteModal{{ f['id'] }}{{ f['name_id'] }}">
+                  <svg width="20" height="20" fill="white">
+                    <use xlink:href="#remove" />
+                  </svg></button>
+
+                <div class="modal" id="filterDeleteModal{{ f['id'] }}{{ f['name_id'] }}" tabindex="-1"
+                  aria-labelledby="filterModalLabel{{ f['id'] }}{{ f['name_id'] }}" aria-hidden="true">
+                  <div class="modal-dialog modal-dialog-centered">
+                    <form method="POST" style="width:1000px;">
+                      <div class="modal-content">
+                        <input type="hidden" name="filterRemoveID" value="{{ f['id'] }}">
+                        <input type="hidden" name="filterRemoveNameID" value="{{ f['name_id'] }}">
+                        <div class="modal-header">
+                          <h1 class="modal-title fs-5" id="filterModalLabel{{ f['id'] }}{{ f['name_id'] }}">Do you want
+                            to
+                            delete this filter?</h1>
+                          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-footer">
+                          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                          <button type="submit" class="btn btn-primary" name="action"
+                            value="deleteFilterBtn">Proceed</button>
+                        </div>
+                      </div>
+                    </form>
+                  </div>
+                </div>
+
+              </td>
+            </tr>
             {% endfor %}
-          </tr>
-          {% endfor %}
-        </tbody>
-      </table>
-      {% else %}
-      <p class="text-center text-danger fw-bold mt-5">You do not have permission to view this data.</p>
-      {% endif %}
+          </tbody>
+        </table>
+      </div>
+      <div class="tab-pane fade" id="filternames">
+        <h1 style="margin-left:50px; margin-top:30px; margin-bottom:-40px;">Filter Names</h1>
+        <!-- Filters Names Table -->
+        <table class="thing table table-striped table-hover table-bordered align-middle"
+          style="margin-left: 4%; margin-top: 50px; width: 90%;">
+          <thead>
+            <tr>
+              <th scope="col">ID</th>
+              <th scope="col">Name ID</th>
+              <th scope="col">Edit</th>
+            </tr>
+          </thead>
+          <tbody class="table-group-divider">
+            {% for n in names %}
+            <tr>
+              <th scope="row">{{ n['id'] }}</th>
+              <td>{{ n['name'] }}</td>
+              <td>
+
+                <button type="button" style="padding-top: 2px; padding-left: 6px; padding-right: 6px;"
+                  class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#nameModal{{ n['id'] }}">
+                  <svg width="20" height="20" fill="white">
+                    <use xlink:href="#gear" />
+                  </svg></button>
+
+                <button type="button" style="padding-top: 2px; padding-left: 6px; padding-right: 6px;"
+                  class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#deleteNameModal{{ n['id'] }}">
+                  <svg width="20" height="20" fill="white">
+                    <use xlink:href="#remove" />
+                  </svg></button>
+
+                <div class="modal" id="nameModal{{ n['id'] }}" tabindex="-1"
+                  aria-labelledby="nameModalLabel{{ n['id'] }}" aria-hidden="true">
+                  <div class="modal-dialog modal-dialog-centered">
+                    <form method="POST" style="width:1000px;">
+                      <input type="hidden" name="nameID" value="{{ n['id'] }}">
+                      <div class="modal-content">
+                        <div class="modal-header">
+                          <h1 class="modal-title fs-5" id="nameModalLabel{{ n['id'] }}">Edit Details</h1>
+                          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                          <form>
+                            <div class="mb-3">
+                              <label for="recipient-name" class="col-form-label">ID</label>
+                              <input type="text" class="form-control" value="{{ n['id'] }}" disabled>
+                            </div>
+                            <div class="mb-3">
+                              <label for="recipient-name" class="col-form-label">Product Name</label>
+                              <input type="text" class="form-control" name="editName{{ n['id'] }}"
+                                value="{{ n['name'] }}" required>
+                            </div>
+                          </form>
+                        </div>
+                        <div class="modal-footer">
+                          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                          <button type="submit" class="btn btn-primary" name="action" value="saveNameBtn">Save
+                            Changes</button>
+                        </div>
+                      </div>
+                    </form>
+                  </div>
+                </div>
+
+                <div class="modal" id="deleteNameModal{{ n['id'] }}" tabindex="-1"
+                  aria-labelledby="deleteNameModalLabel{{ n['id'] }}" aria-hidden="true">
+                  <div class="modal-dialog modal-dialog-centered">
+                    <form method="POST" style="width:1000px;">
+                      <div class="modal-content">
+                        <input type="hidden" name="filterNameRemoveID" value="{{ n['id'] }}">
+                        <input type="hidden" name="filterNameRemoveNameID" value="{{ n['name'] }}">
+                        <div class="modal-header">
+                          <h1 class="modal-title fs-5" id="deleteNameModalLabel{{ n['id'] }}">Do you want to
+                            delete this filter?</h1>
+                          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-footer">
+                          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                          <button type="submit" class="btn btn-primary" name="action"
+                            value="deleteNameBtn">Proceed</button>
+                        </div>
+                      </div>
+                    </form>
+                  </div>
+                </div>
+
+              </td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+      <div class="tab-pane fade" id="carts">
+        <h1 style="margin-left:50px; margin-top:30px; margin-bottom:-40px;">Cart</h1>
+        <!-- Carts Table -->
+        <table class="thing table table-striped table-hover table-bordered align-middle"
+          style="margin-left: 4%; margin-top: 50px; width: 90%;">
+          <thead>
+            <tr>
+              <th scope="col">User ID</th>
+              <th scope="col">Product ID</th>
+              <th scope="col">Edit</th>
+            </tr>
+          </thead>
+          <tbody class="table-group-divider">
+            {% for c in carts %}
+            <tr>
+              <th scope="row">{{ c['userid'] }}</th>
+              <td>
+                {{ c['product'] }}
+              </td>
+              <td>
+
+                <button type="button" style="padding-top: 2px; padding-left: 6px; padding-right: 6px;"
+                  class="btn btn-secondary" data-bs-toggle="modal"
+                  data-bs-target="#cartDeleteModal{{ c['userid'] }}{{ c['product'] }}">
+                  <svg width="20" height="20" fill="white">
+                    <use xlink:href="#remove"/>
+                  </svg></button>
+
+                <div class="modal" id="cartDeleteModal{{ c['userid'] }}{{ c['product'] }}" tabindex="-1"
+                  aria-labelledby="cartModalLabel{{ c['userid'] }}{{ c['product'] }}" aria-hidden="true">
+                  <div class="modal-dialog modal-dialog-centered">
+                    <form method="POST" style="width:1000px;">
+                      <div class="modal-content">
+                        <input type="hidden" name="cartRemoveID" value="{{ c['userid'] }}">
+                        <input type="hidden" name="cartRemoveProductID" value="{{ c['product'] }}">
+                        <div class="modal-header">
+                          <h1 class="modal-title fs-5" id="cartModalLabel{{ c['userid'] }}{{ c['product'] }}">Do you want
+                            to
+                            delete this cart item?</h1>
+                          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-footer">
+                          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                          <button type="submit" class="btn btn-primary" name="action"
+                            value="deleteCartBtn">Proceed</button>
+                        </div>
+                      </div>
+                    </form>
+                  </div>
+                </div>
+
+              </td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
     </div>
 
-
-    <!-- Bootstrap toast using Jinja to display the flash string to show successful login -->
-    <div class="toast-container position-fixed bottom-0 end-0 p-3">
-      {% with messages = get_flashed_messages(with_categories=true) %}
-      {% if messages %}
-      {% for category, message in messages %}
-      <div class="toast show" role="alert" aria-live="assertive" aria-atomic="true">
-        <div class="toast-header bg-success">
-          <strong class="me-auto text-light">System Alert</strong>
-          <small>Just now</small>
-          <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
-        </div>
-        <div class="toast-body bg-success-subtle">
-          {{ message }}
-        </div>
+    <!-- Add filter modal -->
+    <div class="modal" id="addFilterModal" tabindex="-1" aria-labelledby="addFilterModal" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered">
+        <!-- POST request form -->
+        <form method="POST" style="width:1000px;">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h1 class="modal-title fs-5" id="addFilterModalLabel">Add Filter</h1>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+              <div class="mb-3">
+                <label for="addFilterID" class="col-form-label">ID</label>
+                <input type="number" class="form-control" name="addFilterID" min="1" required>
+              </div>
+              <div class="mb-3">
+                <label for="addFilterNameID" class="col-form-label">Name ID</label>
+                <input type="number" class="form-control" name="addFilterNameID" min="1" required>
+              </div>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+              <!-- "action" is the function add_filter_form to add a new filter -->
+              <button type="submit" class="btn btn-primary" name="action" value="add_filter_form">Add Filter</button>
+            </div>
+          </div>
+        </form>
       </div>
-      {% endfor %}
-      {% endif %}
-      {% endwith %}
+    </div>
+
+    <!-- Add item modal -->
+    <div class="modal" id="addItemModal" tabindex="-1" aria-labelledby="addItemModal" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered">
+        <form method="POST" style="width:1000px;">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h1 class="modal-title fs-5" id="addItemModalLabel">Add Item</h1>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+              <div class="mb-3">
+                <label for="addItemName" class="col-form-label">Product Name</label>
+                <input type="text" class="form-control" name="addItemName" required>
+              </div>
+              <div class="mb-3">
+                <label for="addItemCost" class="col-form-label">Cost</label>
+                <input type="number" class="form-control" name="addItemCost" step="0.01" min="0.01" required>
+              </div>
+              <div class="mb-3">
+                <label for="addItemImage" class="col-form-label">Image Location</label>
+                <input type="text" class="form-control" name="addItemImage">
+              </div>
+              <div class="mb-3">
+                <label for="addItemStock" class="col-form-label">Stock</label>
+                <input type="number" class="form-control" name="addItemStock" min="0" required>
+              </div>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+              <button type="submit" class="btn btn-primary" name="action" value="add_item_form">Add Item</button>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <!-- Add filter name modal -->
+    <div class="modal" id="addNameModal" tabindex="-1" aria-labelledby="addNameModal" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered">
+        <form method="POST" style="width:1000px;">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h1 class="modal-title fs-5" id="addNameModalLabel">Add New Filter Name</h1>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+              <div class="mb-3">
+                <label for="addNameFilter" class="col-form-label">Filter Name</label>
+                <input type="text" class="form-control" name="addNameFilter" required>
+              </div>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+              <button type="submit" class="btn btn-primary" name="action" value="add_filter_name_form">Add Item</button>
+            </div>
+          </div>
+        </form>
+      </div>
     </div>
 
   </main>

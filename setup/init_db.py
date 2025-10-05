@@ -8,11 +8,10 @@ with sqlite3.connect("assets/shopped_data.db") as conn:
 
 	# Grab cursor
 	cur = conn.cursor();
+	all_items = cur.execute('SELECT * FROM tbl_items').fetchall()
+	print(all_items)
 
-	# Run test SQL to make sure that everything is working properly
-	all_items = cur.execute("SELECT * FROM tbl_users").fetchall();
-	# Display the table
-	print(all_items);
+	print("[LOG] - Database Initialised")
 
 	# Save changes to database
 	conn.commit();
