@@ -152,7 +152,7 @@ def remove_name(n_item):
     sql = """
     DELETE FROM tbl_filters_names WHERE id = ? AND name = ?;
     """
-    conn.execute(sql, n_item)
+    conn.execute(sql, (n_item,))
     print(f"[LOG] - Removed filter name with ID and name: {n_item}")
     conn.commit()
     conn.close()
@@ -163,7 +163,7 @@ def remove_filter(f_item):
     """
     conn = get_db_connection()
     cur = conn.cursor();
-    remove_filter_id = cur.execute(sql, f_item)
+    remove_filter_id = cur.execute(sql, (f_item,))
     print(f"[LOG] - Removed filter named: {remove_filter_id}")
     conn.commit()
     conn.close()
@@ -176,7 +176,7 @@ def remove_item(i_item):
     """
     conn = get_db_connection()
     cur = conn.cursor();
-    remove_name_id = cur.execute(sql, i_item)
+    remove_name_id = cur.execute(sql, (i_item,))
     print(f"[LOG] - Removed item with id: {remove_name_id}")
     conn.commit()
     conn.close()
@@ -186,6 +186,11 @@ def remove_cart(c_item):
     DELETE FROM tbl_carts WHERE userid = ? AND product = ?;
     """
     conn = get_db_connection()
+    cur = conn.cursor();
+    remove_cart_id = cur.execute(sql, (c_item,))
+    print(f"[LOG] - Removed item with id: {remove_cart_id}")
+    conn.commit()
+    conn.close()
     
 
 app = Flask(__name__, static_url_path='/assets', static_folder='assets');
@@ -336,8 +341,8 @@ def admin():
 
         if action == 'deleteCartBtn':
             print("[LOG] - Processing POST request to delete a cart item")
-            id = request.form.get("cartRemoveProductID")
-            product = request.form.get("cartRemoveID")
+            product = request.form.get("cartRemoveProductID")
+            id = request.form.get("cartRemoveID")
             c_item = (id, product)
             remove_cart(c_item)
             return redirect('/admin')
