@@ -61,11 +61,13 @@ def cat_description_get():
     all_categories = cur.execute('SELECT * FROM tbl_filters').fetchall()
     all_filters = cur.execute('SELECT * FROM tbl_filters_names').fetchall()
     all_carts = cur.execute('SELECT * FROM tbl_carts').fetchall()
-    print("[LOG] - All items, filters, and filter names have been selected")
+    all_purchs = cur.execute('SELECT * FROM tbl_purchs').fetchall()
+    all_purchs_items = cur.execute('SELECT * FROM tbl_purchs_items').fetchall()
+    print("[LOG] - All relevant tables have been selected")
     print("---------------------------------------------------------------")
     cur.close()
     
-    return all_items, all_categories, all_filters, all_carts
+    return all_items, all_categories, all_filters, all_carts, all_purchs, all_purchs_items
 
 # Adding to cart function
 def add_cart(c_data):
@@ -168,6 +170,30 @@ def remove_filter(f_item):
     conn.commit()
     conn.close()
 
+def remove_purchase(p_item):
+    print("[LOG] - Attempting to remove a purchase")
+    sql = """
+    DELETE FROM tbl_purchs WHERE id = ?;
+    """
+    conn = get_db_connection()
+    cur = conn.cursor();
+    remove_purchs_id = cur.execute(sql, (p_item,))
+    print(f"[LOG] - Removed purchase with id: {remove_purchs_id}")
+    conn.commit()
+    conn.close()
+
+def remove_purchase_item(p_item):
+    print("[LOG] - Attempting to remove a purchase item")
+    sql = """
+    DELETE FROM tbl_purchs_items WHERE purchase_id = ? AND item_id = ?;
+    """
+    conn = get_db_connection()
+    cur = conn.cursor();
+    remove_pitem_id = cur.execute(sql, p_item)
+    print(f"[LOG] - Removed item with id: {remove_pitem_id}")
+    conn.commit()
+    conn.close()
+
 # Function to delete an item
 def remove_item(i_item):
     # Deleting from the database using the DELETE function now
@@ -182,16 +208,53 @@ def remove_item(i_item):
     conn.close()
 
 def remove_cart(c_item):
+    print("LOG - Attempting to delete an item from cart")
     sql = """
     DELETE FROM tbl_carts WHERE userid = ? AND product = ?;
     """
     conn = get_db_connection()
     cur = conn.cursor();
-    remove_cart_id = cur.execute(sql, (c_item,))
+    remove_cart_id = cur.execute(sql, c_item)
     print(f"[LOG] - Removed item with id: {remove_cart_id}")
     conn.commit()
     conn.close()
     
+def add_order(user_id, cart_items, total):
+
+    conn = get_db_connection()
+    cursor = conn.cursor()
+
+    # Find new purchase id
+    cursor.execute("SELECT MAX(id) FROM tbl_purchs")
+    last_id = cursor.fetchone()[0]
+    if last_id is None:
+        new_id = 1
+    else:
+        new_id = last_id + 1
+
+    cursor.execute(
+        "INSERT INTO tbl_purchs (id, total, user) VALUES (?, ?, ?)",
+        (new_id, total, user_id)
+    )
+
+    # Insert into tbl_purchs_items
+    for c in cart_items:
+        product_id = c['product']
+        cursor.execute(
+            "INSERT INTO tbl_purchs_items (purchase_id, item_id) VALUES (?, ?)",
+            (new_id, product_id)
+        )
+
+    # Clear user's cart
+    cursor.execute(
+        "DELETE FROM tbl_carts WHERE userid = ?",
+        (user_id,)
+    )
+
+    conn.commit()
+    conn.close()
+
+
 
 app = Flask(__name__, static_url_path='/assets', static_folder='assets');
 
@@ -214,6 +277,9 @@ def index():
        return redirect('/login')
     if request.form.get('action') == 'admin':
        return redirect('/admin')
+    if request.form.get('action') == 'account':
+       return redirect('/account')
+
 
     # Default values for when the page initially loads
     sortcolumn = 'id'
@@ -249,7 +315,6 @@ def index():
         print(f"[LOG] - Action: {action}, Search: {searchinput}, Sort: {sortvar}, Sort Column: {sortcolumn}")
         
     return render_template("shop.html", items=data, role=role, user=user)
-
 
 @app.route('/admin', methods=['GET', 'POST'])
 def admin():
@@ -357,8 +422,24 @@ def admin():
             # Execute function to delete item
             remove_item(i_item)
             return redirect('/admin')
+        
+        if action == 'deletePurchsBtn':
+            print("[LOG] - Processing POST request to delete a Purchase")
+            purchaseid = request.form.get("purchsRemoveID")
+            p_item = (purchaseid)
+            remove_purchase(p_item)
+            return redirect('/admin')
+        
+        if action == 'deletePurchsItemBtn':
+            print("[LOG] - Processing POST request to delete a Purchase Item")
+            purchaseid = request.form.get("purchsitemRemoveProductID")
+            itemid = request.form.get("purchsitemRemoveItemID")
+            p_item = (purchaseid, itemid)
+            remove_purchase_item(p_item)
+            return redirect('/admin')
 
-    return render_template("index.html", items=data[0], filters=data[1], names=data[2], carts=data[3], role=role)
+
+    return render_template("index.html", items=data[0], filters=data[1], names=data[2], carts=data[3], purchs=data[4], purchsitems=data[5], role=role)
 
 # App route for the login page, contains the login function.
 @app.route('/login', methods=['GET', 'POST'])
@@ -400,6 +481,63 @@ def login():
     # Delete user function test
     # print("[LOG] - Deleted a user - rows changed: ", delete_user(2))
     return render_template("login.html")
+
+@app.route('/account', methods=['GET', 'POST'])
+def account():
+    
+    data = cat_description_get()
+
+    role = session.get('role', None)  # None if not logged in
+    user = session.get('id', None)
+    if request.form.get('action') == 'login':
+       return redirect('/login')
+    if request.form.get('action') == 'admin':
+       return redirect('/admin')
+    if request.form.get('action') == 'account':
+       return redirect('/account')
+    
+  # This looks out for POST requests from modals
+    if request.method == 'POST':
+        # Find what action the modal was looking for, and execute the function for the action the modal stated below
+        action = request.form.get("action")
+
+        if action == 'deleteCartBtn':
+            print("[LOG] - Processing POST request to delete a cart item")
+            product = request.form.get("cartRemoveProductID")
+            id = request.form.get("cartRemoveID")
+            c_item = (id, product)
+            remove_cart(c_item)
+            return redirect('/admin')
+        
+        if action == 'order':
+            print("LOG - Processing POST request to place order")
+
+            # Get user's cart
+            usercart = [c for c in data[3] if c['userid'] == user]  # data[3] is carts
+
+            # Calculate total
+            total = 0
+            for c in usercart:
+                for i in data[0]:  # data[0] is items
+                    if i['id'] == c['product']:
+                        total += i['cost']
+
+            # Add order
+            add_order(user, usercart, total)
+
+            # Redirect to refresh page and show empty cart
+            return redirect('/account')
+
+    usercart = [c for c in data[3] if c['userid'] == user]  # data[3] is carts
+    total = 0
+    for c in usercart:
+        # Find the matching item
+        for i in data[0]:  # data[0] is items
+            if i['id'] == c['product']:
+                total += i['cost']
+
+    return render_template("account.html", items=data[0], carts=data[3], role=role, user=user, total=total)
+
 
 if __name__ == "__main__":
   print("[LOG] - Fullstack Webpage - Initialising")

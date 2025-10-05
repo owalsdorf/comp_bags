@@ -58,7 +58,7 @@ CREATE TABLE tbl_carts(
   );
 
 INSERT INTO tbl_carts (userid, product) VALUES(1, 3);
-INSERT INTO tbl_carts (userid, product) VALUES(1, 3);
+INSERT INTO tbl_carts (userid, product) VALUES(1, 2);
 INSERT INTO tbl_carts (userid, product) VALUES(1, 4);
 INSERT INTO tbl_carts (userid, product) VALUES(1, 1);
 
@@ -103,31 +103,28 @@ INSERT INTO tbl_filters (id, name_id) VALUES(10,3);
 CREATE TABLE tbl_purchs(
     id INTEGER,
     total FLOAT,
-    sale_date DATETIME,
   	user INTEGER,
-    PRIMARY KEY(id)
+    PRIMARY KEY(id),
   	FOREIGN KEY(user) REFERENCES tbl_users(id)
 );
 
-INSERT INTO tbl_purchs (id, total, sale_date, user) VALUES(1,0,'2024-04-03 18:41:15',1);
-INSERT INTO tbl_purchs (id, total, sale_date, user) VALUES(2,0,'2024-04-03 19:21:31',2);
-INSERT INTO tbl_purchs (id, total, sale_date, user) VALUES(3,0,'2024-04-03 13:12:08',3);
+INSERT INTO tbl_purchs (id, total, user) VALUES(1,0,1);
+INSERT INTO tbl_purchs (id, total, user) VALUES(2,0,2);
+INSERT INTO tbl_purchs (id, total, user) VALUES(3,0,3);
 
 
 CREATE TABLE tbl_purchs_items(
     purchase_id INTEGER,
     item_id INTEGER,
-    quantity INT,
-    PRIMARY KEY(purchase_id, item_id),
     FOREIGN KEY(purchase_id) REFERENCES tbl_purchs(id),
     FOREIGN KEY(item_id) REFERENCES tbl_items(id)
 );
 
-INSERT INTO tbl_purchs_items (purchase_id, item_id, quantity) VALUES(1,1,1);
-INSERT INTO tbl_purchs_items (purchase_id, item_id, quantity) VALUES(1,2,2);
-INSERT INTO tbl_purchs_items (purchase_id, item_id, quantity) VALUES(1,3,1);
-INSERT INTO tbl_purchs_items (purchase_id, item_id, quantity) VALUES(2,4,1);
-INSERT INTO tbl_purchs_items (purchase_id, item_id, quantity) VALUES(3,5,2);
-INSERT INTO tbl_purchs_items (purchase_id, item_id, quantity) VALUES(3,1,1);
-INSERT INTO tbl_purchs_items (purchase_id, item_id, quantity) VALUES(3,2,1);
-INSERT INTO tbl_purchs_items (purchase_id, item_id, quantity) VALUES(3,3,1);
+INSERT INTO tbl_purchs_items (purchase_id, item_id) VALUES(1,1);
+INSERT INTO tbl_purchs_items (purchase_id, item_id) VALUES(1,2);
+INSERT INTO tbl_purchs_items (purchase_id, item_id) VALUES(1,3);
+INSERT INTO tbl_purchs_items (purchase_id, item_id) VALUES(2,4);
+INSERT INTO tbl_purchs_items (purchase_id, item_id) VALUES(3,5);
+INSERT INTO tbl_purchs_items (purchase_id, item_id) VALUES(3,1);
+INSERT INTO tbl_purchs_items (purchase_id, item_id) VALUES(3,2);
+INSERT INTO tbl_purchs_items (purchase_id, item_id) VALUES(3,3);

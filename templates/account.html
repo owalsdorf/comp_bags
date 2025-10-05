@@ -63,7 +63,7 @@
                     </button>
                 </form>
                 <form method="POST">
-                    <button type="submit" name="action" value="account" class="btn">
+                    <button type="submit" name="action" value="login" class="btn">
                         <svg width="28" height="28">
                             <use xlink:href="#cart"></use>
                         </svg>
@@ -128,89 +128,59 @@
         </div>
     </nav>
 
+
     <div class="container-fluid text-center mt-5">
-        <img src="/assets/images/Untitled presentation (1).png" height="300px" width="90%">
+        <img src="/assets/images/Untitled presentation (3).png" height="300px" width="90%">
     </div>
 
     <hr class="mx-5 mt-5 mb-4">
-    <div class="container-fluid d-flex justify-content-between" style="width: 80%">
-        <h1 class="fw-bold">All Items</h1>
 
-        <div class="dropdown ms-2">
-            <!-- Sort dropdown -->
-            <button class="mt-2 btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown"
-                aria-expanded="false" style="font-size: 13px;">
-                Sort
+    <div class="container-fluid d-flex justify-content-between mb-4" style="width: 90%">
+        <h1 class="fw-bold">Your Cart</h1>
+    </div>
+
+    <div class="container-fluid">
+        <table class="table table-hover table-bordered align-middle">
+            <thead>
+                <tr>
+                    <th scope="col" width="10%">Product ID</th>
+                    <th scope="col" width="80px">Image</th>
+                    <th scope="col">Name</th>
+                    <th scope="col">Cost</th>
+                </tr>
+            </thead>
+            <tbody class="table-group-divider">
+                {% for c in carts if c['userid'] == user %}
+                {% for i in items if i['id'] == c['product'] %}
+                <tr>
+                    <td>{{ i['id'] }}</td>
+                    <td><img src="/assets/images/Screen Shot 2025-09-09 at 12.11.10 PM.png" height="80px"></td>
+                    <td>{{ i['name'] }}</td>
+                    <td>${{ i['cost'] }}</td>
+                </tr>
+                {% endfor %}
+                {% endfor %}
+            </tbody>
+            <tfoot class="table-group-divider">
+                <tr>
+                    <th colspan="3" class="text-end fs-4">Total:</th>
+                    <th class="fs-4">${{ total }}</th>
+                </tr>
+            </tfoot>
+        </table>
+    </div>
+
+    <div class="container-fluid d-flex justify-content-between mt-5" style="width: 90%">
+        <h3 class="fw-bold">Place Order?</h3>
+
+        <form method="POST">
+            <button type="submit" name="action" value="order" class="btn btn-success"
+                {% if total == 0 %}disabled{% endif %}>
+                Purchase
             </button>
-            <ul class="dropdown-menu">
-                <form method="POST">
-                    <li>
-                        <!-- Inside the dropdown menu, has two types of sort method. Descending or ascending -->
-                        <!-- Both sorts have hidden values for function stacking. The only difference is the value of sortMethod. -->
-                        <button type="submit" name="action" value="sorting" class="dropdown-item"
-                            style="font-size: 13px;">
-                            Price - High to Low
-                            <input type="hidden" name="sortMethod" value="DESC">
-                            <input type="hidden" name="sortColumn" value="cost">
-                            <input type="hidden" name="search" value=" ">
-                        </button>
-                    </li>
-                </form>
-                <form method="POST">
-                    <li>
-                        <button type="submit" name="action" value="sorting" class="dropdown-item"
-                            style="font-size: 13px;">
-                            Price - Low to High
-                            <input type="hidden" name="sortMethod" value="ASC">
-                            <input type="hidden" name="sortColumn" value="cost">
-                            <input type="hidden" name="search" value=" ">
-                        </button>
-                    </li>
-                </form>
-            </ul>
-        </div>
+        </form>
     </div>
-
-    <hr class="mt-4" style="margin-left:9rem; margin-right:9rem;">
-
-    <form method="POST" class="mx-auto" style="width: 20vw;">
-        <input type="text" name="search" placeholder="Search..." class="form-control mt-4" autocomplete="off"
-            value="{{ request.form.get('search', '') }}">
-        <input type="hidden" name="action" value="searching">
-        <input type="hidden" name="sortMethod" value="{{ request.form.get('sortMethod', 'ASC') }}">
-        <input type="hidden" name="sortColumn" value="{{ request.form.get('sortColumn', 'id') }}">
-        <button type="submit" style="display: none;"></button>
-    </form>
-
-
-    <div class="container-fluid" style="width: 80%;">
-        <div class="row">
-            {% for i in items %}
-            <div class="col-12 col-sm-6 col-md-4 col-lg-3 mt-4">
-                <a href="#" class="text-decoration-none text-reset">
-                    <img src="/assets/images/Screen Shot 2025-09-09 at 12.11.10 PM.png" height="width" width="100%">
-                    <small class="d-inline fs-6 fw-bold">{{ i['name'] }}</small>
-                </a>
-
-                <form method="POST">
-                    <button type="submit" name="action" value="cart" class="btn float-end mt-3 btn-hover-raise">
-                        <svg width="40" height="40">
-                            <use xlink:href="#add"></use>
-                        </svg>
-                        <input type="hidden" name="userid" value="{{ user }}">
-                        <input type="hidden" name="productid" value="{{ i['id'] }}">
-                    </button>
-                </form>
-
-                <small class="d-block fw-lighter">Product</small>
-                <small class="d-block mt-2">${{ i['cost'] }}</small>
-            </div>
-            {% endfor %}
-        </div>
-    </div>
-
-
-
+    <hr class="mx-5">
 
 
     <!-- Footer -->
