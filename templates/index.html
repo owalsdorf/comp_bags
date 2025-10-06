@@ -183,6 +183,7 @@
             Filter Names
           </a>
         </li>
+        <!-- Newly added - three new subsections for carts, purchases and purchase items. -->
         <li class="nav-item">
           <a class="nav-link btn btn-toggle d-inline-flex align-items-center rounded border-0 collapsed"
             data-bs-toggle="tab" href="#carts">
@@ -521,6 +522,7 @@
           </tbody>
         </table>
       </div>
+      <!-- New Carts table -->
       <div class="tab-pane fade" id="carts">
         <h1 style="margin-left:50px; margin-top:30px; margin-bottom:-40px;">Cart</h1>
         <!-- Carts Table -->
@@ -534,6 +536,7 @@
             </tr>
           </thead>
           <tbody class="table-group-divider">
+            <!-- Run through all fields in tbl carts and display them -->
             {% for c in carts %}
             <tr>
               <th scope="row">{{ c['userid'] }}</th>
@@ -541,7 +544,7 @@
                 {{ c['product'] }}
               </td>
               <td>
-
+                <!-- Function to delete from tbl carts, same for purchs and purchs items, using same code from previous years. -->
                 <button type="button" style="padding-top: 2px; padding-left: 6px; padding-right: 6px;"
                   class="btn btn-secondary" data-bs-toggle="modal"
                   data-bs-target="#cartDeleteModal{{ c['userid'] }}{{ c['product'] }}">
@@ -578,6 +581,7 @@
           </tbody>
         </table>
       </div>
+      <!-- New Purchases table -->
       <div class="tab-pane fade" id="purchs">
         <h1 style="margin-left:50px; margin-top:30px; margin-bottom:-40px;">Purchases</h1>
         <!-- Purchases Table -->
@@ -591,6 +595,7 @@
             </tr>
           </thead>
           <tbody class="table-group-divider">
+            <!-- Find and run through all rows in purchase table and display them -->
             {% for p in purchs %}
             <tr>
               <th scope="row">{{ p['id'] }}</th>
@@ -637,6 +642,7 @@
           </tbody>
         </table>
       </div>
+      <!-- New Purchase Items table -->
       <div class="tab-pane fade" id="purchsitems">
         <h1 style="margin-left:50px; margin-top:30px; margin-bottom:-40px;">Purchase Items</h1>
         <!-- Purchase Items Table -->
@@ -649,6 +655,7 @@
             </tr>
           </thead>
           <tbody class="table-group-divider">
+            <!-- Run through and display all fields from tbl purchs items -->
             {% for p in purchsitems %}
             <tr>
               <th scope="row">{{ p['purchase_id'] }}</th>

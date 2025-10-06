@@ -150,7 +150,9 @@
                 </tr>
             </thead>
             <tbody class="table-group-divider">
+                <!-- Display the users cart. -->
                 {% for c in carts if c['userid'] == user %}
+                <!-- Display the id of the product as the product's name -->
                 {% for i in items if i['id'] == c['product'] %}
                 <tr>
                     <td>{{ i['id'] }}</td>
@@ -164,6 +166,7 @@
             <tfoot class="table-group-divider">
                 <tr>
                     <th colspan="3" class="text-end fs-4">Total:</th>
+                    <!-- Display the total, calculated in the backend -->
                     <th class="fs-4">${{ total }}</th>
                 </tr>
             </tfoot>
@@ -174,6 +177,7 @@
         <h3 class="fw-bold">Place Order?</h3>
 
         <form method="POST">
+            <!-- Disallow the user from purchasing an item if they have a total of 0 and cannot buy anything. -->
             <button type="submit" name="action" value="order" class="btn btn-success"
                 {% if total == 0 %}disabled{% endif %}>
                 Purchase
