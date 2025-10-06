@@ -75,7 +75,7 @@
                     spellcheck="false">
             </div>
             <div class="col-4 text-center" style="font-family:'Special Elite'; color:rgb(82, 63, 24)">
-                <h1>Munchable</h1>
+                <a href="home" class="text-decoration-none text-reset"><h1>Munchable</h1></a>
             </div>
             <!-- Checks if the user's role is an admin, if they are, they can see this admin portal. -->
             {% if role == 'admin' %}
@@ -179,7 +179,7 @@
 
     <!-- Search function, from last year -->
     <form method="POST" class="mx-auto" style="width: 20vw;">
-        <input type="text" name="search" placeholder="Search..." class="form-control mt-4" autocomplete="off"
+        <input type="text" name="search" placeholder="Search..." class="form-control mt-4" autocomplete="off" maxlength="100"
             value="{{ request.form.get('search', '') }}">
         <input type="hidden" name="action" value="searching">
         <input type="hidden" name="sortMethod" value="{{ request.form.get('sortMethod', 'ASC') }}">
@@ -195,6 +195,7 @@
             <div class="col-12 col-sm-6 col-md-4 col-lg-3 mt-4">
                 <a href="#" class="text-decoration-none text-reset">
                     <img src="/assets/images/Screen Shot 2025-09-09 at 12.11.10 PM.png" height="width" width="100%">
+                    <!-- Display the name of the id -->
                     <small class="d-inline fs-6 fw-bold">{{ i['name'] }}</small>
                 </a>
 
@@ -210,6 +211,7 @@
                 </form>
 
                 <small class="d-block fw-lighter">Product</small>
+                <!-- Display the cost of the ID -->
                 <small class="d-block mt-2">${{ i['cost'] }}</small>
             </div>
             {% endfor %}

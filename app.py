@@ -72,13 +72,14 @@ def cat_description_get():
 # Adding to cart function
 def add_cart(c_data):
     conn = get_db_connection()
-    # executes sql function that inserts into tbl_carts the data collected from the frontend
+    # Executes sql function that inserts into tbl_carts the data collected from the frontend.
+    # Insert into userid the id of the user currently logged in.
+    # Insert into product the id of the product the user selected.
     sql = """INSERT INTO tbl_carts
     (userid, product)
     VALUES(?,?)
     """
     conn.execute(sql, c_data)
-    # print(f"[LOG] - Added item to cart with id and product id: {c_data}")
     conn.commit()
     conn.close()
 
@@ -111,7 +112,6 @@ def update_name(n_name):
             WHERE id = ?
             """
 	conn.execute(sql, n_name)
-	# print(f"[LOG] - Updated filter name with title and ID: {n_name}")
 	conn.commit()
 	conn.close()
 
@@ -213,15 +213,16 @@ def remove_item(i_item):
     conn.close()
 
 def remove_cart(c_item):
-    # print("LOG - Attempting to delete an item from cart")
-    # Deleting items from cart
+    # Deleting items from cart.
+    # The cart will be the cart of the user whos id 
+    # is equal to the one provided from the session.
+    # The adjacent product id will be found, and the entry will be deleted.
     sql = """
     DELETE FROM tbl_carts WHERE userid = ? AND product = ?;
     """
     conn = get_db_connection()
     cur = conn.cursor();
     cur.execute(sql, c_item)
-    # print(f"[LOG] - Removed item with id: {remove_cart_id}")
     conn.commit()
     conn.close()
     
@@ -353,7 +354,7 @@ def admin():
     # If not admin, don't show the table, this prevents non-admin users from seeing these tables even if they access the page,
     # They are stopped here and sent back to shop
     if role != 'admin':
-      return render_template("shop.html")
+      return redirect('/shop')
     
     # This looks out for POST requests from modals
     if request.method == 'POST':
@@ -535,7 +536,7 @@ def account():
             id = request.form.get("cartRemoveID")
             c_item = (id, product)
             remove_cart(c_item)
-            return redirect('/admin')
+            return redirect('/account')
         
         # New function to place an order
         if action == 'order':
