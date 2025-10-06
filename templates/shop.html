@@ -91,7 +91,7 @@
                 <a href="login" class="text-decoration-none text-reset fw-lighter" style="font-size: 12px;">Contact
                     Us</a>
                 <a href="login" class="text-decoration-none text-reset fw-lighter" style="font-size: 12px;">| Help |</a>
-                <a href="login" class="text-decoration-none text-reset fw-lighter" style="font-size: 12px;">Login</a>
+                <a href="login" class="text-decoration-none text-reset fw-lighter" style="font-size: 12px;">Log Out</a>
             </div>
         </div>
     </div>
@@ -101,28 +101,28 @@
         <div class="container-fluid">
             <ul class="navbar-nav d-flex w-100 justify-content-evenly">
                 <li class="nav-item">
-                    <a class="nav-link active" aria-current="page" href="#">Home</a>
+                    <a class="nav-link active" aria-current="page" href="home">Home</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#">Laptop Bags</a>
+                    <a class="nav-link" href="shop">Laptop Bags</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#">Laptop Cases</a>
+                    <a class="nav-link" href="shop">Laptop Cases</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#">Phone Cases</a>
+                    <a class="nav-link" href="shop">Phone Cases</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#">New Releases</a>
+                    <a class="nav-link" href="shop">New Releases</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#">Popular</a>
+                    <a class="nav-link" href="shop">Popular</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#">Highly Rated</a>
+                    <a class="nav-link" href="shop">Highly Rated</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#">Sales and Deals</a>
+                    <a class="nav-link" href="shop">Sales and Deals</a>
                 </li>
             </ul>
         </div>
@@ -209,10 +209,6 @@
         </div>
     </div>
 
-
-
-
-
     <!-- Footer -->
     <div class="container-fluid mt-5 mb-4" style="background-color:rgb(47, 47, 47); height:275px;">
         <div class="row" style="color:white">
@@ -250,36 +246,13 @@
                 <h8>Password</h8>
                 <input class="form-control w-75" placeholder="Email" autocomplete="off" spellcheck="false">
                 <form method="POST">
-                    <button type="submit" class="btn btn-secondary mt-4">Submit</button>
+                    <button type="submit" name="action" value="login" class="btn btn-secondary mt-4">Submit</button>
                 </form>
             </div>
         </div>
         <div class="row text-center mt-1">
             <a style="color:white; font-size:9px;">©2025 Munchable. All rights reserved.</a>
         </div>
-    </div>
-
-
-
-
-    <!-- Bootstrap toast using Jinja to display the flash string to show successful login -->
-    <div class="toast-container position-fixed bottom-0 end-0 p-3">
-        {% with messages = get_flashed_messages(with_categories=true) %}
-        {% if messages %}
-        {% for category, message in messages %}
-        <div class="toast show" role="alert" aria-live="assertive" aria-atomic="true">
-            <div class="toast-header bg-success">
-                <strong class="me-auto text-light">System Alert</strong>
-                <small>Just now</small>
-                <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
-            </div>
-            <div class="toast-body bg-success-subtle">
-                {{ message }}
-            </div>
-        </div>
-        {% endfor %}
-        {% endif %}
-        {% endwith %}
     </div>
 
     </main>

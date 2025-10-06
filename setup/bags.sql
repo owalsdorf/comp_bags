@@ -122,9 +122,6 @@ CREATE TABLE tbl_purchs_items(
 
 INSERT INTO tbl_purchs_items (purchase_id, item_id) VALUES(1,1);
 INSERT INTO tbl_purchs_items (purchase_id, item_id) VALUES(1,2);
-INSERT INTO tbl_purchs_items (purchase_id, item_id) VALUES(1,3);
 INSERT INTO tbl_purchs_items (purchase_id, item_id) VALUES(2,4);
 INSERT INTO tbl_purchs_items (purchase_id, item_id) VALUES(3,5);
 INSERT INTO tbl_purchs_items (purchase_id, item_id) VALUES(3,1);
-INSERT INTO tbl_purchs_items (purchase_id, item_id) VALUES(3,2);
-INSERT INTO tbl_purchs_items (purchase_id, item_id) VALUES(3,3);

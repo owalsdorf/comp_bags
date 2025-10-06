@@ -264,8 +264,22 @@ app.config['SECRET_KEY'] = 'secret_key_placeholder'
 # When there is no set @app.route, automatically route to /login
 @app.route("/",methods=['GET', 'POST'])
 def default():
-   print("[LOG] - Redirecting to login")
+   print("[LOG] - No route, redirecting to login")
    return redirect("/login")
+
+# App route for the login page, contains the login function.
+@app.route('/home', methods=['GET', 'POST'])
+def home():
+    role = session.get('role', None)
+    print("[LOG] - Arrived at home page")
+    if request.form.get('action') == 'login':
+       return redirect('/login')
+    if request.form.get('action') == 'admin':
+       return redirect('/admin')
+    if request.form.get('action') == 'account':
+       return redirect('/account')
+    return render_template("home.html", role=role)
+
 
 # Shop app route
 @app.route('/shop', methods=['GET', 'POST'])
@@ -467,7 +481,7 @@ def login():
                 session['id'] = user['id'] 
                 # Redirect the user to the index page + send a flash message that they have logged in
                 flash(f'Logged in successfully for {username}')
-                return redirect("/shop")
+                return redirect("/home")
              else:
                 # If password does not match:
                 flash(f'Password invalid')

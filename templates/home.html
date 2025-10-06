@@ -42,7 +42,7 @@
 
     <div class="container-fluid mt-2">
         <div class="row">
-            <div class="col-1 text-center d-flex justify-content-center gap-2">
+            <div class="col-2 text-center d-flex justify-content-center gap-2">
                 <form method="POST">
                     <button type="submit" name="action" value="login" class="btn">
                         <svg width="30" height="30">
@@ -51,7 +51,7 @@
                     </button>
                 </form>
                 <form method="POST">
-                    <button type="submit" name="action" value="login" class="btn">
+                    <button type="submit" name="action" value="account" class="btn">
                         <svg width="28" height="28">
                             <use xlink:href="#cart"></use>
                         </svg>
@@ -62,45 +62,54 @@
                 <input type="search" class="form-control" id="search-input" placeholder="Search..." autocomplete="off"
                     spellcheck="false">
             </div>
-            <div class="col text-center" style="font-family:'Special Elite'; color:rgb(82, 63, 24)">
-                <h1>Test</h1>
+            <div class="col-4 text-center" style="font-family:'Special Elite'; color:rgb(82, 63, 24)">
+                <h1>Munchable</h1>
             </div>
-            <div class="col-3 text-end mt-2">
+            {% if role == 'admin' %}
+            <form method="POST" class="col-2 mt-2">
+                <button type="submit" name="action" value="admin" class="btn"
+                    style="font-size: 15px; font-family:'Special Elite'; color:#523f18">
+                    Admin Portal
+                </button>
+            </form>
+            {% else %}
+            <div class="col"></div>
+            {% endif %}
+            <div class="col-2 text-end mt-2">
                 <a href="login" class="text-decoration-none text-reset fw-lighter" style="font-size: 12px;">Contact
                     Us</a>
                 <a href="login" class="text-decoration-none text-reset fw-lighter" style="font-size: 12px;">| Help |</a>
-                <a href="login" class="text-decoration-none text-reset fw-lighter" style="font-size: 12px;">Login</a>
+                <a href="login" class="text-decoration-none text-reset fw-lighter" style="font-size: 12px;">Log Out</a>
             </div>
         </div>
     </div>
-
 
     <nav class="navbar navbar-expand" style="background-color:#e5dec7">
         <div class="container-fluid">
             <ul class="navbar-nav d-flex w-100 justify-content-evenly">
                 <li class="nav-item">
-                    <a class="nav-link active" aria-current="page" href="#">Home</a>
+                    <a class="nav-link active" aria-current="page" href="home">Home</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#">Laptop Bags</a>
+                    <a class="nav-link" href="shop">Laptop Bags</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#">Laptop Cases</a>
+                    <a class="nav-link" href="shop">Laptop Cases</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#">Phone Cases</a>
+                    <a class="nav-link" href="shop">Phone Cases</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#">New Releases</a>
+                    <a class="nav-link" href="shop">New Releases</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#">Popular</a>
+                    <a class="nav-link" href="shop">Popular</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#">Highly Rated</a>
+                    <a class="nav-link" href="shop">Highly Rated</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#">Sales and Deals</a>
+                    <a class="nav-link" href="shop">Sales and Deals</a>
                 </li>
             </ul>
         </div>
@@ -175,6 +184,7 @@
         </div>
     </div>
 
+   
     <div class="container-fluid mt-5 mb-4" style="background-color:rgb(47, 47, 47); height:275px;">
         <div class="row" style="color:white">
             <div class="col offset-md-1">
@@ -210,15 +220,15 @@
                 <input class="form-control mb-2 w-75" placeholder="Email" autocomplete="off" spellcheck="false">
                 <h8>Password</h8>
                 <input class="form-control w-75" placeholder="Email" autocomplete="off" spellcheck="false">
-                <button type="submit" class="btn btn-secondary mt-4">Submit</button>
+                <form method="POST">
+                    <button type="submit" name="action" value="login" class="btn btn-secondary mt-4">Submit</button>
+                </form>
             </div>
         </div>
         <div class="row text-center mt-1">
             <a style="color:white; font-size:9px;">©2025 Munchable. All rights reserved.</a>
         </div>
     </div>
-
-
 
 
     <!-- Bootstrap toast using Jinja to display the flash string to show successful login -->
